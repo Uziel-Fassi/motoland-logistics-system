@@ -1,5 +1,4 @@
-/* --- VARIABLES DE COLOR Y FUENTE (RAÍZ) --- */
-/* Mantenemos las variables y la fuente 'Poppins' para un look de texto profesional */
+
 :root {
     --color-primario: #003366;
     --color-primario-oscuro: #002244;
@@ -12,10 +11,8 @@
     --fuente-principal: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* --- IMPORTACIÓN DE FUENTE MODERNA (Google Fonts) --- */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
 
-/* --- ESTILO BASE Y FONDO --- */
 * {
     margin: 0;
     padding: 0;
@@ -26,14 +23,12 @@ body {
     font-family: var(--fuente-principal);
     color: var(--color-texto);
 
-    /* CAMBIO: Volvemos al fondo de moto sin el overlay oscuro y con un fondo claro de respaldo */
     background-color: #f0f2f5;
     background-image: url('https://images.unsplash.com/photo-1621595163855-ce85e016a133?q=80&w=2070&auto=format&fit=crop');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
 
-    /* MANTENEMOS ESTO: La solución para que la página se estire y funcione el scroll */
     min-height: 100vh;
     display: flex;
     justify-content: center;
@@ -41,19 +36,16 @@ body {
     padding: 40px 15px;
 }
 
-/* MANTENEMOS ESTO: La regla especial para centrar la página de login */
 body.login-page-body {
     align-items: center;
 }
 
-/* --- CONTENEDOR PRINCIPAL --- */
 .container {
     width: 95%;
     max-width: 1200px;
 
-    /* CAMBIO: Volvemos al fondo blanco casi opaco, sin el efecto de vidrio */
     background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(5px); /* Un desenfoque muy sutil para que el texto resalte */
+    backdrop-filter: blur(5px);
 
     border-radius: var(--radio-borde);
     box-shadow: var(--sombra-caja);
@@ -62,7 +54,6 @@ body.login-page-body {
 }
 
 
-/* --- EL RESTO DE ESTILOS SE MANTIENEN PORQUE SON BUENOS Y FUNCIONALES --- */
 
 /* Estilos de Formularios (Login, Proveedores, etc) */
 .login-container {
@@ -138,7 +129,7 @@ button:disabled { background-color: #ccc; cursor: not-allowed; }
     gap: 25px;
 }
 .button {
-    background: #f8f9fa; /* Un poco más claro */
+    background: #f8f9fa; 
     border: 1px solid #eee;
     border-radius: var(--radio-borde);
     text-align: center;
