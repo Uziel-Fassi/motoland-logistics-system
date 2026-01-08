@@ -24,12 +24,8 @@
 </div>
 
 <script>
-    // Limpiamos cualquier sesión anterior al cargar la página de login.
     sessionStorage.removeItem('isLoggedIn');
 
-    // Justo cuando el usuario envía el formulario, marcamos la sesión como iniciada.
-    // El servlet se encargará de redirigir a error.html si los datos son incorrectos,
-    // por lo que esta marca solo será útil si el login es exitoso.
     document.querySelector('form').addEventListener('submit', () => {
         sessionStorage.setItem('isLoggedIn', 'true');
     });
