@@ -16,7 +16,6 @@
         .stock-normal { color: #1e8e3e; }
         .ubicacion-cell { font-weight: 600; color: #444; }
         @media (max-width:900px) {
-            /* en pantallas pequeñas podría colapsar la columna ubicacion si quieres */
         }
     </style>
 </head>
@@ -45,7 +44,6 @@
     </div>
 </div>
 
-<!-- util de ubicacion -->
 <script src="productos-ubicacion.js"></script>
 
 <script>
@@ -54,7 +52,6 @@
         const searchInput = document.getElementById('search-input');
         let allProducts = [];
 
-        // fallback determinístico para mostrar una ubicación si el backend no la trae
         function fallbackUbicacionFromProduct(p) {
             const seed = (typeof p.id === 'number') ? p.id : (p.codigo ? Array.from(String(p.codigo)).reduce((s,c)=>s+c.charCodeAt(0),0) : Date.now());
             const zona = (seed % 4) + 1;               // 1..4
@@ -64,16 +61,13 @@
             return `P${zona}/R${rack}/${altura}`;
         }
 
-        // Devuelve solo la parte "P2/R32/C" sin prefijo
         function buildUbicacionPlain(p) {
             try {
                 const pu = window.ProductosUbicacion;
                 if (pu && typeof pu.etiquetaUbicacion === 'function') {
-                    // la función del util devuelve " - Ubicacion: P2/R32/C" en nuestra versión,
-                    // por eso limpiamos el prefijo si existe
+
                     const etiqueta = pu.etiquetaUbicacion(p) || '';
                     if (etiqueta) {
-                        // quitar prefijo si lo trae
                         return etiqueta.replace(/^\s*-\s*Ubicacion:\s*/i, '');
                     }
                 }
@@ -82,7 +76,6 @@
             }
 
             if (p.ubicacion) return String(p.ubicacion);
-            // Si hay columnas estructuradas:
             if (p.ubicacion_zona && p.ubicacion_rack && p.ubicacion_altura) {
                 return `P${p.ubicacion_zona}/R${p.ubicacion_rack}/${String(p.ubicacion_altura).toUpperCase()}`;
             }
@@ -118,7 +111,6 @@
             });
         }
 
-        // fetch usando ruta relativa basada en el contexto (para evitar 404 fuera de app)
         const ctx = window.location.pathname.split('/')[1] || '';
         const apiUrl = `${window.location.origin}/${ctx}/productos`;
 
