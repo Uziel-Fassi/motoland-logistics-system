@@ -13,7 +13,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-// Modelo actualizado para una transacción del historial
 class Transaccion {
     private String tipo;
     private String codigo;
@@ -21,7 +20,7 @@ class Transaccion {
     private double total;
     private String detalle;
     private String estado;
-    private String ubicacion; // nuevo campo para colocar la(s) ubicacion(es)
+    private String ubicacion;
 
     public Transaccion(String tipo, String codigo, String fecha, double total, String detalle, String estado, String ubicacion) {
         this.tipo = tipo;
@@ -52,7 +51,7 @@ public class HistorialServlet extends HttpServlet {
 
         try (Connection conn = DatabaseConnection.getConnection()) {
 
-            // 1) VENTAS: obtengo info, items agregados y ubicaciones (si existen)
+            // 1) VENTAS: info, items agregados y ubicaciones (si existen)
             String sqlVentas =
                     "SELECT v.id, v.codigo_venta, v.fecha_venta, v.total, v.estado, c.nombre as cliente_nombre, " +
                             "       GROUP_CONCAT(CONCAT(dv.cantidad, 'x ', p.nombre) SEPARATOR ' | ') AS productos_info, " +
@@ -82,7 +81,7 @@ public class HistorialServlet extends HttpServlet {
                             rs.getDouble("total"),
                             detalle,
                             rs.getString("estado"),
-                            (ubicaciones != null && !ubicaciones.trim().isEmpty()) ? ubicaciones : "-" // ubicacion separada
+                            (ubicaciones != null && !ubicaciones.trim().isEmpty()) ? ubicaciones : "-"
                     ));
                 }
             }
