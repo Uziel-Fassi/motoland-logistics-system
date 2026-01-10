@@ -15,12 +15,11 @@ import java.sql.*;
 import java.util.List;
 import java.util.Map;
 
-// Modelo para recibir los productos del catálogo desde el JSON
 class CatalogoItem {
     String nombreProducto;
     String descripcion;
     double costo;
-    String ubicacion; // agregado
+    String ubicacion; 
 }
 
 @WebServlet("/proveedores")
@@ -31,11 +30,9 @@ public class ProveedoresServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        // Definimos tipo de respuesta
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
-        // Leemos el JSON complejo que nos enviará el JavaScript
         Map<String, Object> payload = gson.fromJson(request.getReader(), Map.class);
 
         String nombreProveedor = (String) payload.get("nombre");
@@ -68,7 +65,6 @@ public class ProveedoresServlet extends HttpServlet {
             }
 
             // 2. Insertamos cada producto de su catálogo en la tabla 'catalogo_proveedor'
-            // Ahora insertamos también la columna `ubicacion` (si viene)
             String sqlCatalogo = "INSERT INTO catalogo_proveedor (proveedor_id, nombre_producto, descripcion, costo, ubicacion) VALUES (?, ?, ?, ?, ?)";
             try (PreparedStatement stmtCatalogo = conn.prepareStatement(sqlCatalogo)) {
                 for (CatalogoItem item : catalogo) {
