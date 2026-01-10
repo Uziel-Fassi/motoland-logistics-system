@@ -9,12 +9,11 @@ import javax.servlet.http.*;
 import java.io.IOException;
 import java.sql.*;
 
-// Modelo para recibir los datos del HTML (nombres de campos JSON)
+// Modelo para recibir los datos del HTML
 class DevolucionRequest {
     String tipo;
     String codigo;
     String motivo;
-    // Opcional: producto y ubicacion (si el usuario lo indica)
     String producto;
     String ubicacion_zona;
     String ubicacion_rack;
@@ -33,16 +32,15 @@ public class DevolucionesServlet extends HttpServlet {
 
         try {
             conn = DatabaseConnection.getConnection();
-            conn.setAutoCommit(false); // Iniciamos transacción
+            conn.setAutoCommit(false);
 
-            // Respuestas en JSON y UTF-8
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
 
             if (devReq == null) throw new SQLException("Payload inválido.");
 
             if ("Venta".equalsIgnoreCase(devReq.tipo)) {
-                // --- Anular venta: devolver stock ---
+                // Anular venta: devolver stock 
                 String sqlFind = "SELECT id, estado FROM ventas WHERE codigo_venta = ?";
                 int ventaId = -1;
                 try (PreparedStatement stmt = conn.prepareStatement(sqlFind)) {
@@ -76,7 +74,7 @@ public class DevolucionesServlet extends HttpServlet {
                 }
 
             } else if ("Compra".equalsIgnoreCase(devReq.tipo)) {
-                // --- Anular compra: quitar stock (si hay suficiente) ---
+                // Anular compra: quitar stock (si hay suficiente) 
                 String sqlFind = "SELECT id, estado FROM compras WHERE codigo_compra = ?";
                 int compraId = -1;
                 try (PreparedStatement stmt = conn.prepareStatement(sqlFind)) {
@@ -152,7 +150,6 @@ public class DevolucionesServlet extends HttpServlet {
                     }
 
                     if (productoId == null) {
-                        // no frenar todo: intentar crear el producto mínimo (si prefieres no crear, comentar este bloque)
                         String sqlCreate = "INSERT INTO productos (nombre, categoria, medida, precio_venta, stock) VALUES (?, 'General', 'Unidad', 0.0, 0)";
                         try (PreparedStatement ps = conn.prepareStatement(sqlCreate, Statement.RETURN_GENERATED_KEYS)) {
                             ps.setString(1, devReq.producto);
@@ -161,7 +158,6 @@ public class DevolucionesServlet extends HttpServlet {
                                 if (gk.next()) productoId = gk.getInt(1);
                             }
                         }
-                        // asignar código producto si deseas
                         if (productoId != null) {
                             String codigoProducto = "PROD-" + productoId;
                             try (PreparedStatement ps = conn.prepareStatement("UPDATE productos SET codigo = ? WHERE id = ?")) {
@@ -186,7 +182,7 @@ public class DevolucionesServlet extends HttpServlet {
                 }
             }
 
-            // Registrar la devolución en la tabla 'devoluciones'
+            // Registrar la devolución en la tabla
             String sqlLog = "INSERT INTO devoluciones (tipo_transaccion_original, id_transaccion_original, codigo_transaccion_original, motivo) VALUES (?, ?, ?, ?)";
             long devId;
             int transId = -1;
@@ -233,7 +229,6 @@ public class DevolucionesServlet extends HttpServlet {
             if (conn != null) try { conn.rollback(); } catch (SQLException ex) { ex.printStackTrace(); }
             e.printStackTrace();
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            // Aseguramos que el mensaje JSON esté escapado simple
             String safe = e.getMessage() != null ? e.getMessage().replace("\"", "'") : "Error desconocido";
             response.getWriter().write("{\"status\":\"error\", \"message\":\"" + safe + "\"}");
         } finally {
