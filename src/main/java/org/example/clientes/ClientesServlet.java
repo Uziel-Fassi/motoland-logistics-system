@@ -16,7 +16,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-// Modelo para un Cliente (incluye id)
 class Cliente {
     private int id;
     private String nombre;
@@ -30,7 +29,6 @@ class Cliente {
         this.direccion = direccion;
     }
 
-    // Getters (Gson los usa automáticamente al serializar)
     public int getId() { return id; }
     public String getNombre() { return nombre; }
     public String getContacto() { return contacto; }
