@@ -39,9 +39,7 @@ public class ProductosServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // ====> ¡CORRECCIÓN AÑADIDA AQUÍ! <====
-        // Definimos el tipo de contenido y la codificación al principio del método.
-        // Así, cualquier respuesta (sea de éxito o de error) usará UTF-8.
+
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
@@ -64,12 +62,10 @@ public class ProductosServlet extends HttpServlet {
         } catch (SQLException e) {
             e.printStackTrace();
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            // Ahora esta respuesta de error también usará UTF-8.
             response.getWriter().write("{\"status\":\"error\", \"message\":\"Error al conectar con la base de datos.\"}");
             return;
         }
 
-        // Nos aseguramos de enviar un JSON limpio y perfecto
         response.getWriter().write(gson.toJson(inventario));
     }
 }
