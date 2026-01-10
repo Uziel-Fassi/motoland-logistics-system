@@ -37,7 +37,7 @@
       margin-top: 15px;
       border-radius: 5px;
       text-align: center;
-      display: none; /* Oculto por defecto */
+      display: none;
     }
     .status-message.success {
       background-color: #d4edda;
@@ -95,7 +95,7 @@
 <script>
   // --- FUNCIÓN PARA CARGAR LA LISTA DE CLIENTES ---
   function cargarClientes() {
-    fetch('../clientes') // Apuntamos al nuevo servlet de clientes
+    fetch('../clientes') 
             .then(response => response.json())
             .then(data => {
               const tbody = document.querySelector('#clientes-table tbody');
@@ -129,7 +129,7 @@
 
       const formData = new FormData(form);
 
-      fetch('../clientes', { // Enviamos los datos al mismo servlet
+      fetch('../clientes', {
         method: 'POST',
         body: new URLSearchParams(formData)
       })
@@ -139,7 +139,7 @@
                 if (data.status === 'success') {
                   statusMessage.className = 'status-message success';
                   form.reset();
-                  cargarClientes(); // Recargamos la tabla para ver el nuevo cliente
+                  cargarClientes(); 
                 } else {
                   statusMessage.className = 'status-message error';
                 }
