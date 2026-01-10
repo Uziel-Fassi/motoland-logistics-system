@@ -16,11 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-/**
- * ComprasServlet mejorado:
- * - GET: list providers / search q / get catalog by proveedorId (incluye ubicacion)
- * - POST: registra compra, actualiza/crea productos, actualiza stock y ubicacion, inserta detalle_compras
- */
+
 
 class ProveedorSimple {
     private int id;
@@ -30,7 +26,6 @@ class ProveedorSimple {
 
 class CatalogoProducto {
     private int id;
-    // Nombres de campo pensados para serializar igual que en DB / frontend
     private String nombre_producto;
     private double costo;
     private String ubicacion;
@@ -44,7 +39,6 @@ class CatalogoProducto {
 }
 
 class CompraItem {
-    // campos esperados en el JSON: nombreProducto, cantidad, costoUnitario, ubicacion, descripcion (opcional)
     String nombreProducto;
     int cantidad;
     double costoUnitario;
@@ -56,12 +50,7 @@ class CompraItem {
 public class ComprasServlet extends HttpServlet {
     private final Gson gson = new Gson();
 
-    /**
-     * GET:
-     * - /compras                 -> lista proveedores (id,nombre)
-     * - /compras?q=texto         -> busca proveedores por nombre (LIKE)
-     * - /compras?proveedorId=NN  -> devuelve catálogo del proveedor (id, nombre_producto, costo, ubicacion)
-     */
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setCharacterEncoding("UTF-8");
@@ -104,7 +93,7 @@ public class ComprasServlet extends HttpServlet {
             return;
         }
 
-        // Si viene q -> búsqueda por nombre de proveedor (autocomplete)
+        // Si viene q -> (autocomplete)
         if (q != null && !q.trim().isEmpty()) {
             List<ProveedorSimple> resultados = new ArrayList<>();
             String sql = "SELECT id, nombre FROM proveedores WHERE nombre LIKE ? ORDER BY nombre LIMIT 30";
@@ -125,7 +114,6 @@ public class ComprasServlet extends HttpServlet {
             return;
         }
 
-        // Por defecto devolver la lista completa de proveedores (id,nombre)
         List<ProveedorSimple> proveedores = new ArrayList<>();
         String sql = "SELECT id, nombre FROM proveedores ORDER BY nombre";
         try (Connection conn = DatabaseConnection.getConnection();
@@ -142,17 +130,6 @@ public class ComprasServlet extends HttpServlet {
         }
     }
 
-    /**
-     * POST: registra una compra.
-     * JSON esperado:
-     * {
-     *   "proveedorId": 3,
-     *   "codigo_compra": "OPCIONAL",
-     *   "fecha_compra": "2025-09-10T12:00",
-     *   "estado": "Completada",
-     *   "items": [ { "nombreProducto":"...", "cantidad":1, "costoUnitario":100.0, "ubicacion":"P1/R2/A" }, ... ]
-     * }
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setCharacterEncoding("UTF-8");
@@ -167,11 +144,10 @@ public class ComprasServlet extends HttpServlet {
             return;
         }
 
-        // obtener proveedorId: puede venir como número o (por seguridad) intentar resolver por nombre
+        // obtener proveedorId
         Integer proveedorId = null;
         if (payload.containsKey("proveedorId") && payload.get("proveedorId") != null) {
             try {
-                // Gson puede parsearlo como Double -> handle
                 Object pid = payload.get("proveedorId");
                 if (pid instanceof Number) proveedorId = ((Number) pid).intValue();
                 else proveedorId = Integer.parseInt(pid.toString());
@@ -240,11 +216,10 @@ public class ComprasServlet extends HttpServlet {
                 ps.executeUpdate();
             }
 
-            // 4. Preparar inserción de detalle
+            // 4. Preparar detalle
             String sqlDetalle = "INSERT INTO detalle_compras (compra_id, producto_id, cantidad, costo_unitario, subtotal) VALUES (?, ?, ?, ?, ?)";
             try (PreparedStatement psDetalle = conn.prepareStatement(sqlDetalle)) {
 
-                // Reutilizaremos queries para buscar producto por nombre y para crear producto nuevo
                 String sqlFindProductByName = "SELECT id FROM productos WHERE nombre = ?";
                 String sqlUpdateStockAndUbic = "UPDATE productos SET stock = stock + ?, ubicacion = ? WHERE id = ?";
                 String sqlUpdateStock = "UPDATE productos SET stock = stock + ? WHERE id = ?";
@@ -279,13 +254,13 @@ public class ComprasServlet extends HttpServlet {
                         }
                     }
 
-                    // si no existe el producto -> crearlo (y asignar stock)
+                    // si no existe el producto -> crearlo
                     if (productoId == -1) {
                         try (PreparedStatement psIns = conn.prepareStatement(sqlInsertProduct, Statement.RETURN_GENERATED_KEYS)) {
                             psIns.setString(1, item.nombreProducto);
                             psIns.setString(2, "General");
                             psIns.setString(3, "Unidad");
-                            // establecemos precio_venta base como markup del costo (ej 1.5)
+                            // precio_venta base como markup del costo 
                             psIns.setDouble(4, item.costoUnitario * 1.5);
                             if (item.ubicacion == null || item.ubicacion.trim().isEmpty()) {
                                 psIns.setNull(5, Types.VARCHAR);
@@ -316,7 +291,7 @@ public class ComprasServlet extends HttpServlet {
                         }
                     }
 
-                    // Finalmente insertar línea detalle (ya tenemos productoId)
+                    // insertar línea detalle 
                     psDetalle.setLong(1, compraId);
                     psDetalle.setLong(2, productoId);
                     psDetalle.setInt(3, item.cantidad);
