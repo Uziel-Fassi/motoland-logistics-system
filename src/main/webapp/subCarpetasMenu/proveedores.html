@@ -12,7 +12,7 @@
             --card:#ffffff;
             --primary:#003366;
             --accent:#0b66c3;
-            --danger:#d9534f; /* color de botones tipo "Cerrar / Volver" */
+            --danger:#d9534f;
             --danger-dark:#c43d3d;
             --muted:#6c757d;
             --radius:10px;
@@ -32,7 +32,6 @@
         header{ display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; }
         header h1{ color:var(--primary); margin:0; font-size:26px; }
 
-        /* --- BOTÓN "VOLVER AL MENÚ" (coincidente con otros botones rojos) --- */
         .btn-back{
             background:var(--danger);
             color:#fff;
@@ -222,7 +221,7 @@
             const payload = { nombre: nombre, contacto: contacto, catalogo: catalogo };
 
             try {
-                // Enviamos JSON al servlet (tu ProveedoresServlet doPost espera JSON)
+                // Enviamos JSON al servlet
                 const res = await fetch('../proveedores', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json; charset=utf-8' },
@@ -230,7 +229,7 @@
                 });
 
                 const text = await res.text();
-                // intentar parsear JSON (tu servlet devuelve JSON)
+                // intentar parsear JSON
                 let body = {};
                 try { body = JSON.parse(text); } catch (err) { body = { message: text }; }
 
