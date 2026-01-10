@@ -22,15 +22,12 @@ public class LoginServlet extends HttpServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
-        // Preparamos la respuesta para que sea de tipo JSON
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
         if (authService.autenticar(username, password)) {
-            // Apunta a la nueva ubicación del menú
             response.sendRedirect("menu.html");
         } else {
-            // Apunta a la nueva ubicación del index
             response.sendRedirect("error.html?error=true");
         }
     }
