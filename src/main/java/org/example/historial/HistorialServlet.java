@@ -51,7 +51,7 @@ public class HistorialServlet extends HttpServlet {
 
         try (Connection conn = DatabaseConnection.getConnection()) {
 
-            // 1) VENTAS: info, items agregados y ubicaciones (si existen)
+            // 1) VENTAS: info
             String sqlVentas =
                     "SELECT v.id, v.codigo_venta, v.fecha_venta, v.total, v.estado, c.nombre as cliente_nombre, " +
                             "       GROUP_CONCAT(CONCAT(dv.cantidad, 'x ', p.nombre) SEPARATOR ' | ') AS productos_info, " +
@@ -86,7 +86,7 @@ public class HistorialServlet extends HttpServlet {
                 }
             }
 
-            // 2) COMPRAS: idem, obteniendo proveedor, items y ubicaciones
+            // 2) COMPRAS: idem
             String sqlCompras =
                     "SELECT c.id, c.codigo_compra, c.fecha_compra, c.total, c.estado, p.nombre as proveedor_nombre, " +
                             "       GROUP_CONCAT(CONCAT(dc.cantidad, 'x ', prod.nombre) SEPARATOR ' | ') AS productos_info, " +
@@ -121,7 +121,6 @@ public class HistorialServlet extends HttpServlet {
                 }
             }
 
-            // 3) DEVOLUCIONES: por ahora no suelen tener ubicaciones asociadas directamente
             String sqlDevoluciones = "SELECT id, codigo_devolucion, fecha_devolucion, codigo_transaccion_original, tipo_transaccion_original, motivo FROM devoluciones";
             try (PreparedStatement stmt = conn.prepareStatement(sqlDevoluciones);
                  ResultSet rs = stmt.executeQuery()) {
@@ -149,7 +148,6 @@ public class HistorialServlet extends HttpServlet {
             return;
         }
 
-        // Ordenamos por fecha (desc)
         historial.sort((t1, t2) -> t2.getFecha().compareTo(t1.getFecha()));
 
         response.getWriter().write(gson.toJson(historial));
