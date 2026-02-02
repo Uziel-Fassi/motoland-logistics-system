@@ -60,7 +60,6 @@ public class ComprasServlet extends HttpServlet {
         String q = request.getParameter("q");
 
         if (proveedorIdParam != null && !proveedorIdParam.trim().isEmpty()) {
-            // Devolver catálogo del proveedor (incluye ubicacion)
             int proveedorId;
             try {
                 proveedorId = Integer.parseInt(proveedorIdParam);
@@ -93,7 +92,6 @@ public class ComprasServlet extends HttpServlet {
             return;
         }
 
-        // Si viene q -> (autocomplete)
         if (q != null && !q.trim().isEmpty()) {
             List<ProveedorSimple> resultados = new ArrayList<>();
             String sql = "SELECT id, nombre FROM proveedores WHERE nombre LIKE ? ORDER BY nombre LIMIT 30";
@@ -144,7 +142,6 @@ public class ComprasServlet extends HttpServlet {
             return;
         }
 
-        // obtener proveedorId
         Integer proveedorId = null;
         if (payload.containsKey("proveedorId") && payload.get("proveedorId") != null) {
             try {
@@ -191,10 +188,8 @@ public class ComprasServlet extends HttpServlet {
             conn = DatabaseConnection.getConnection();
             conn.setAutoCommit(false);
 
-            // 1. Calcular total
             double totalCompra = items.stream().mapToDouble(i -> i.cantidad * i.costoUnitario).sum();
 
-            // 2. Insertar compra (proveedor_id, total)
             long compraId;
             String sqlCompra = "INSERT INTO compras (proveedor_id, total) VALUES (?, ?)";
             try (PreparedStatement ps = conn.prepareStatement(sqlCompra, Statement.RETURN_GENERATED_KEYS)) {
@@ -207,7 +202,6 @@ public class ComprasServlet extends HttpServlet {
                 }
             }
 
-            // 3. Generar código y actualizar
             String codigoCompra = "COMPRA-" + compraId;
             String sqlUpdCode = "UPDATE compras SET codigo_compra = ? WHERE id = ?";
             try (PreparedStatement ps = conn.prepareStatement(sqlUpdCode)) {
@@ -216,7 +210,6 @@ public class ComprasServlet extends HttpServlet {
                 ps.executeUpdate();
             }
 
-            // 4. Preparar detalle
             String sqlDetalle = "INSERT INTO detalle_compras (compra_id, producto_id, cantidad, costo_unitario, subtotal) VALUES (?, ?, ?, ?, ?)";
             try (PreparedStatement psDetalle = conn.prepareStatement(sqlDetalle)) {
 
@@ -229,13 +222,11 @@ public class ComprasServlet extends HttpServlet {
                 for (CompraItem item : items) {
                     long productoId = -1;
 
-                    // intentar encontrar producto por nombre exacto
                     try (PreparedStatement psFind = conn.prepareStatement(sqlFindProductByName)) {
                         psFind.setString(1, item.nombreProducto);
                         try (ResultSet rs = psFind.executeQuery()) {
                             if (rs.next()) {
                                 productoId = rs.getLong("id");
-                                // actualizar stock y ubicacion si viene
                                 if (item.ubicacion != null && !item.ubicacion.trim().isEmpty()) {
                                     try (PreparedStatement psUp = conn.prepareStatement(sqlUpdateStockAndUbic)) {
                                         psUp.setInt(1, item.cantidad);
@@ -254,13 +245,11 @@ public class ComprasServlet extends HttpServlet {
                         }
                     }
 
-                    // si no existe el producto -> crearlo
                     if (productoId == -1) {
                         try (PreparedStatement psIns = conn.prepareStatement(sqlInsertProduct, Statement.RETURN_GENERATED_KEYS)) {
                             psIns.setString(1, item.nombreProducto);
                             psIns.setString(2, "General");
                             psIns.setString(3, "Unidad");
-                            // precio_venta base como markup del costo 
                             psIns.setDouble(4, item.costoUnitario * 1.5);
                             if (item.ubicacion == null || item.ubicacion.trim().isEmpty()) {
                                 psIns.setNull(5, Types.VARCHAR);
@@ -271,14 +260,12 @@ public class ComprasServlet extends HttpServlet {
                             try (ResultSet gk = psIns.getGeneratedKeys()) {
                                 if (gk.next()) {
                                     productoId = gk.getLong(1);
-                                    // generar codigo producto
                                     String codigoProducto = "PROD-" + productoId;
                                     try (PreparedStatement psUpd = conn.prepareStatement(sqlUpdateProductCodigo)) {
                                         psUpd.setString(1, codigoProducto);
                                         psUpd.setLong(2, productoId);
                                         psUpd.executeUpdate();
                                     }
-                                    // inicializar stock
                                     try (PreparedStatement psStock = conn.prepareStatement("UPDATE productos SET stock = stock + ? WHERE id = ?")) {
                                         psStock.setInt(1, item.cantidad);
                                         psStock.setLong(2, productoId);
@@ -291,7 +278,6 @@ public class ComprasServlet extends HttpServlet {
                         }
                     }
 
-                    // insertar línea detalle 
                     psDetalle.setLong(1, compraId);
                     psDetalle.setLong(2, productoId);
                     psDetalle.setInt(3, item.cantidad);
@@ -300,11 +286,9 @@ public class ComprasServlet extends HttpServlet {
                     psDetalle.addBatch();
                 }
 
-                // Ejecutar batch detalle
                 psDetalle.executeBatch();
             }
 
-            // commit
             conn.commit();
             response.getWriter().write("{\"status\":\"success\",\"message\":\"Compra " + codigoCompra + " registrada y stock actualizado.\"}");
         } catch (Exception e) {
