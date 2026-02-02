@@ -40,7 +40,6 @@
                 <input id="codigo-compra" name="codigo_compra" type="text" placeholder="Ej: COMPRA-123">
             </div>
 
-            <!-- Autocomplete proveedor: input visible + hidden providerId -->
             <div class="form-group relative" style="margin-top:10px;">
                 <label for="proveedor-input">Proveedor:</label>
                 <input id="proveedor-input" name="proveedor_display" type="text" placeholder="Escribe para buscar proveedor..." autocomplete="off">
@@ -101,17 +100,14 @@
         const compraForm = document.getElementById('compra-form');
         const statusMessage = document.getElementById('status-message');
 
-        // Datos cargados desde servidor
         let proveedoresList = [];     
         let catalogoProveedor = [];   
 
-        // Cargar proveedores al inicio (GET /compras devuelve lista de proveedores cuando no se pasa proveedorId)
         fetch('../compras')
             .then(r => r.ok ? r.json() : Promise.reject('No providers'))
             .then(data => proveedoresList = Array.isArray(data) ? data : [])
             .catch(err => { console.warn('No se pudieron cargar proveedores:', err); proveedoresList = []; });
 
-        // Filtrar y mostrar sugerencias para proveedores
         function showProveedorSuggestions(filter) {
             const q = (filter || '').trim().toLowerCase();
             proveedorSuggestions.innerHTML = '';
@@ -144,7 +140,7 @@
             if (!proveedorSuggestions.contains(ev.target) && ev.target !== proveedorInput) proveedorSuggestions.style.display = 'none';
         });
 
-        // Cargar catálogo del proveedor seleccionado desde backend: GET /compras?proveedorId=ID
+        // GET /compras?proveedorId=ID
         function loadCatalogoDelProveedor(proveedorId) {
             catalogoProveedor = [];
             if (!proveedorId) return;
@@ -183,7 +179,6 @@
             return s;
         }
 
-        // crear fila detalle con autocompletado de producto a partir del catalogoProveedor actual
         function crearRow() {
             const tr = document.createElement('tr');
 
@@ -237,12 +232,11 @@
             selR.addEventListener('change', updatePreview);
             selA.addEventListener('change', updatePreview);
 
-            // Autocomplete productos solo del catálogo del proveedor seleccionado
             inpProd.addEventListener('input', (e) => {
                 sugerencias.innerHTML = '';
                 const q = (e.target.value || '').trim().toLowerCase();
                 if (!q || catalogoProveedor.length === 0) { sugerencias.style.display = 'none'; return; }
-                // buscar coincidencias por nombre_producto o id
+                // buscar coincidencias
                 const matches = catalogoProveedor.filter(p =>
                     p.nombre_producto.toLowerCase().includes(q) ||
                     String(p.id).startsWith(q)
@@ -258,7 +252,6 @@
                     div.dataset.costo = m.costo;
                     if (m.ubicacion) div.dataset.ubicacion = m.ubicacion;
                     div.addEventListener('click', () => {
-                        // set valores en la fila
                         inpProd.value = m.nombre_producto;
                         inpCatalogId.value = m.id;
                         if (typeof m.costo !== 'undefined') inpPrecio.value = Number(m.costo).toFixed(2);
@@ -311,7 +304,6 @@
             return tr;
         }
 
-        // botón añadir linea
         addDetailBtn.addEventListener('click', () => {
             const row = crearRow();
             detallesTbody.appendChild(row);
@@ -319,7 +311,6 @@
             window.scrollTo({ top: row.offsetTop - 100, behavior: 'smooth' });
         });
 
-        // agregar una fila inicial
         detallesTbody.appendChild(crearRow());
 
         // validar ubicacion fila
