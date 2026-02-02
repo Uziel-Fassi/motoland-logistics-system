@@ -9,7 +9,6 @@ import javax.servlet.http.*;
 import java.io.IOException;
 import java.sql.*;
 
-// Modelo para recibir los datos del HTML
 class DevolucionRequest {
     String tipo;
     String codigo;
@@ -40,7 +39,7 @@ public class DevolucionesServlet extends HttpServlet {
             if (devReq == null) throw new SQLException("Payload inválido.");
 
             if ("Venta".equalsIgnoreCase(devReq.tipo)) {
-                // Anular venta: devolver stock 
+                // Anular venta
                 String sqlFind = "SELECT id, estado FROM ventas WHERE codigo_venta = ?";
                 int ventaId = -1;
                 try (PreparedStatement stmt = conn.prepareStatement(sqlFind)) {
@@ -74,7 +73,7 @@ public class DevolucionesServlet extends HttpServlet {
                 }
 
             } else if ("Compra".equalsIgnoreCase(devReq.tipo)) {
-                // Anular compra: quitar stock (si hay suficiente) 
+                // Anular compra: quitar stock
                 String sqlFind = "SELECT id, estado FROM compras WHERE codigo_compra = ?";
                 int compraId = -1;
                 try (PreparedStatement stmt = conn.prepareStatement(sqlFind)) {
@@ -123,8 +122,6 @@ public class DevolucionesServlet extends HttpServlet {
                 throw new SQLException("Tipo de transacción no válido. Use 'Venta' o 'Compra'.");
             }
 
-            // Si el usuario incluyó 'producto' y las tres partes de ubicacion están completas,
-            // actualizamos la columna 'productos.ubicacion' para ese producto (por codigo o nombre).
             if (devReq.producto != null && !devReq.producto.trim().isEmpty()) {
                 boolean anyUbicProvided = (devReq.ubicacion_zona != null && !devReq.ubicacion_zona.trim().isEmpty())
                         || (devReq.ubicacion_rack != null && !devReq.ubicacion_rack.trim().isEmpty())
@@ -182,7 +179,6 @@ public class DevolucionesServlet extends HttpServlet {
                 }
             }
 
-            // Registrar la devolución en la tabla
             String sqlLog = "INSERT INTO devoluciones (tipo_transaccion_original, id_transaccion_original, codigo_transaccion_original, motivo) VALUES (?, ?, ?, ?)";
             long devId;
             int transId = -1;
