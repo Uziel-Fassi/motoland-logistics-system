@@ -93,7 +93,6 @@
 </div>
 
 <script>
-  // --- FUNCIÓN PARA CARGAR LA LISTA DE CLIENTES ---
   function cargarClientes() {
     fetch('../clientes') 
             .then(response => response.json())
@@ -115,15 +114,12 @@
             });
   }
 
-  // --- CÓDIGO QUE SE EJECUTA AL CARGAR LA PÁGINA ---
   document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('cliente-form');
     const statusMessage = document.getElementById('status-message');
 
-    // 1. Cargar la lista inicial de clientes
     cargarClientes();
 
-    // 2. Escuchar el evento 'submit' del formulario para registrar nuevos clientes
     form.addEventListener('submit', event => {
       event.preventDefault();
 
