@@ -30,7 +30,6 @@ class ProductoVenta {
         this.stock = stock;
         this.ubicacion = ubicacion;
     }
-    // getters si los necesitas
 }
 
 class VentaItem {
@@ -43,9 +42,7 @@ class VentaItem {
 public class VentasServlet extends HttpServlet {
     private final Gson gson = new Gson();
 
-    /**
-     * GET: devuelve la lista de productos (para autocompletar).
-     */
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("application/json");
@@ -76,10 +73,6 @@ public class VentasServlet extends HttpServlet {
         }
     }
 
-    /**
-     * POST: crear una nueva venta. Se espera JSON con:
-     * { clienteId: <int|null>, items: [{productoId, cantidad, precioUnitario}, ...] }
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("application/json");
@@ -93,7 +86,6 @@ public class VentasServlet extends HttpServlet {
             try {
                 clienteId = ((Double) payload.get("clienteId")).intValue();
             } catch (ClassCastException ex) {
-                // si viene como Integer
                 clienteId = ((Number) payload.get("clienteId")).intValue();
             }
         }
@@ -129,10 +121,8 @@ public class VentasServlet extends HttpServlet {
                 }
             }
 
-            // 2) calcular total
             double totalVenta = items.stream().mapToDouble(it -> (it.cantidad * (it.precioUnitario == null ? 0.0 : it.precioUnitario))).sum();
 
-            // 3) insertar venta (con cliente si viene)
             String insertVenta = "INSERT INTO ventas (cliente_id, total) VALUES (?, ?)";
             long ventaId;
             try (PreparedStatement psIns = conn.prepareStatement(insertVenta, Statement.RETURN_GENERATED_KEYS)) {
@@ -146,7 +136,6 @@ public class VentasServlet extends HttpServlet {
                 }
             }
 
-            // 4) generar codigo_venta y actualizar
             String codigoVenta = "VENTA-" + ventaId;
             try (PreparedStatement psUpd = conn.prepareStatement("UPDATE ventas SET codigo_venta = ? WHERE id = ?")) {
                 psUpd.setString(1, codigoVenta);
@@ -154,7 +143,6 @@ public class VentasServlet extends HttpServlet {
                 psUpd.executeUpdate();
             }
 
-            // 5) insertar detalle y restar stock
             String insertDetalle = "INSERT INTO detalle_ventas (venta_id, producto_id, cantidad, precio_unitario, subtotal) VALUES (?, ?, ?, ?, ?)";
             String updateStock = "UPDATE productos SET stock = stock - ? WHERE id = ?";
             try (PreparedStatement psDet = conn.prepareStatement(insertDetalle);
