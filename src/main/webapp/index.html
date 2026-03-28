@@ -3,30 +3,128 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MOTOLAND - Iniciar Sesión</title>
-    <link rel="stylesheet" href="style.css">
+    <title>MOTOLAND — Iniciar Sesión</title>
+    <link rel="stylesheet" href="spa.css">
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow: auto;
+            background: linear-gradient(135deg, #0a1122 0%, #0d1730 50%, #111b2e 100%);
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 420px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 40px 36px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+
+        .login-logo {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--color-red), #e74c3c);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            font-size: 30px;
+            font-weight: 700;
+            color: #fff;
+            box-shadow: 0 8px 28px rgba(192, 57, 43, 0.35);
+        }
+
+        .login-card h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-white);
+            margin: 0 0 4px;
+        }
+
+        .login-card .login-sub {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 28px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .login-card .form-group {
+            text-align: left;
+        }
+
+        .login-card .form-group label {
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .login-card .btn-login {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, var(--color-red), #a5321f);
+            color: #fff;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-family: var(--font);
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-top: 8px;
+        }
+
+        .login-card .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(192, 57, 43, 0.4);
+        }
+
+        .login-divider {
+            height: 1px;
+            background: var(--border-color);
+            margin: 20px 0;
+        }
+
+        .login-footer {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+    </style>
 </head>
 <body>
-<div class="container login-container">
-    <h1>MOTOLAND INVENTARIO</h1>
+
+<div class="login-card">
+    <div class="login-logo">M</div>
+    <h1>MOTOLAND</h1>
+    <div class="login-sub">Sistema de Gestión de Inventario</div>
 
     <form action="login" method="post">
         <div class="form-group">
             <label for="username">Usuario</label>
-            <input type="text" id="username" name="username" placeholder="Ingrese su usuario" required>
+            <input class="form-control" type="text" id="username" name="username" placeholder="Ingrese su usuario" required>
         </div>
         <div class="form-group">
             <label for="password">Contraseña</label>
-            <input type="password" id="password" name="password" placeholder="Ingrese su contraseña" required>
+            <input class="form-control" type="password" id="password" name="password" placeholder="Ingrese su contraseña" required>
         </div>
-        <button type="submit">Iniciar Sesión</button>
+        <button type="submit" class="btn-login">Iniciar Sesión</button>
     </form>
+
+    <div class="login-divider"></div>
+    <div class="login-footer">Motoland S.A. &copy; 2026 — Acceso autorizado únicamente</div>
 </div>
 
 <script>
+    // limpiamos session por si quedo colgada
     sessionStorage.removeItem('isLoggedIn');
-
     document.querySelector('form').addEventListener('submit', () => {
+        // flag spa
         sessionStorage.setItem('isLoggedIn', 'true');
     });
 </script>

@@ -93,8 +93,9 @@
 </div>
 
 <script>
-  function cargarClientes() {
-    fetch('../clientes') 
+  // traemos clientes
+  function getData() {
+    fetch('../clientes')
             .then(response => response.json())
             .then(data => {
               const tbody = document.querySelector('#clientes-table tbody');
@@ -114,12 +115,15 @@
             });
   }
 
+  // init
   document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('cliente-form');
     const statusMessage = document.getElementById('status-message');
 
-    cargarClientes();
+    // cargamos lista al toque
+    getData();
 
+    // submit del form
     form.addEventListener('submit', event => {
       event.preventDefault();
 
@@ -135,7 +139,7 @@
                 if (data.status === 'success') {
                   statusMessage.className = 'status-message success';
                   form.reset();
-                  cargarClientes(); 
+                  getData();
                 } else {
                   statusMessage.className = 'status-message error';
                 }

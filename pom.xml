@@ -5,9 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.example</groupId>
-    <artifactId>miloginwebcontodo</artifactId>
+    <artifactId>motoland</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>miloginwebcontodo</name>
+    <name>motoland</name>
     <packaging>war</packaging>
 
     <properties>
@@ -41,6 +41,7 @@
     </dependencies>
 
     <build>
+        <finalName>motoland</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

@@ -16,7 +16,7 @@
         header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
         header h1{color:var(--primary);margin:0;font-size:32px}
 
-        /* <-- botón como los demás (píldora, rojo) --> */
+        /* btn volver */
         .btn-back{
             background:var(--danger);
             color:#fff;
@@ -49,7 +49,7 @@
         input.invalid {border-color:var(--danger); box-shadow: 0 4px 12px rgba(217,83,79,0.08);}
         @media (max-width:900px){ .row{grid-template-columns:1fr} }
 
-        /* Notificación fija abajo (misma UX que en otras páginas) */
+        /* notif fija */
         #status-message {
             position: fixed;
             left: 50%;
@@ -126,9 +126,9 @@
 <script>
     (function(){
         const apiBase = '../'; // ajusta si tu contexto es distinto
-        let productosList = []; // lista completa desde server
-        let clienteList = [];   // lista clientes
-        let selectedProduct = null; // producto seleccionado desde sugerencias
+        let productosList = []; // data productos
+        let clienteList = [];   // data clientes
+        let selectedProduct = null;
         let carrito = []; // { productoId, nombre, precioUnitario, cantidad, stock, ubicacion, codigo }
 
         // DOM
@@ -146,11 +146,9 @@
             statusDiv.textContent = msg;
             statusDiv.className = ok ? 'success' : 'error';
             statusDiv.classList.add(ok ? 'success' : 'error');
-            // ensure both classes reset correctly
             statusDiv.classList.toggle('success', ok);
             statusDiv.classList.toggle('error', !ok);
             statusDiv.style.display = 'block';
-            // hide after timeout (unless timeout === 0)
             if (timeout > 0) {
                 clearTimeout(statusDiv._t);
                 statusDiv._t = setTimeout(() => { statusDiv.style.display = 'none'; }, timeout);
@@ -161,8 +159,8 @@
             statusDiv.style.display = 'none';
         }
 
-        // Cargar productos y clientes al inicio
-        function loadData(){
+        // carga inicial
+        function getData(){
             fetch(apiBase + 'ventas')
                 .then(r => r.ok ? r.json() : r.json().then(j=>{ throw j; }))
                 .then(data => { productosList = Array.isArray(data) ? data : []; })
@@ -181,11 +179,11 @@
                         clienteSelect.appendChild(opt);
                     });
                 })
-                .catch(err => { console.error('Error cargando clientes', err); /* permitimos proceder */ });
+                .catch(err => { console.error('Error cargando clientes', err); });
         }
-        loadData();
+            getData();
 
-        // AUTOCOMPLETE
+            // autocomplete
         inputSearch.addEventListener('input', () => {
             const q = inputSearch.value.trim().toLowerCase();
             resultsDiv.innerHTML = '';
@@ -206,12 +204,12 @@
             resultsDiv.style.display = 'block';
         });
 
-        // ocultar al click fuera
+        // click fuera -> cerrar
         document.addEventListener('click', (e) => {
             if (!resultsDiv.contains(e.target) && e.target !== inputSearch) resultsDiv.style.display = 'none';
         });
 
-        // Añadir al carrito
+        // add carrito
         addBtn.addEventListener('click', () => {
             if (!selectedProduct) { showStatus('Selecciona un producto de la lista desplegable.', false); inputSearch.focus(); return; }
             const cantidad = parseInt(cantidadInput.value) || 0;
@@ -240,7 +238,7 @@
             renderCarrito();
         });
 
-        // Renderizar tabla de carrito con edición
+        // pintar carrito
         function renderCarrito(){
             ventaTbody.innerHTML = '';
             let total = 0;
@@ -415,7 +413,7 @@
                 // limpiar y recargar datos
                 carrito = [];
                 renderCarrito();
-                loadData();
+                getData();
             } catch(err) {
                 console.error('Error enviando venta', err);
                 showStatus('Error de conexión al registrar venta.', false);

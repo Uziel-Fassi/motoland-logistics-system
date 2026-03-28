@@ -6,10 +6,12 @@
     <title>Registro de Compras - MOTOLAND</title>
     <link rel="stylesheet" href="../style.css" />
     <style>
+        /* estilos autocomplete */
         .autocomplete-list { position: absolute; background:#fff; border:1px solid #ddd; max-height:200px; overflow:auto; z-index:10000; width:100%; box-shadow:0 6px 18px rgba(0,0,0,0.08); border-radius:6px; }
         .autocomplete-item { padding:8px 10px; cursor:pointer; }
         .autocomplete-item:hover { background:#f1f5f9; }
         .relative { position:relative; }
+        /* base */
         .form-section { background-color:#f9f9f9; padding:20px; border-radius:8px; margin-bottom:20px; box-shadow:0 2px 5px rgba(0,0,0,0.06); }
         #detalles-compras-table { width:100%; border-collapse:collapse; margin-top: 12px; }
         #detalles-compras-table th, #detalles-compras-table td { padding:10px; border:1px solid #e6e6e6; text-align:left; vertical-align:middle; }
@@ -40,6 +42,7 @@
                 <input id="codigo-compra" name="codigo_compra" type="text" placeholder="Ej: COMPRA-123">
             </div>
 
+            <!-- provider autocomplete -->
             <div class="form-group relative" style="margin-top:10px;">
                 <label for="proveedor-input">Proveedor:</label>
                 <input id="proveedor-input" name="proveedor_display" type="text" placeholder="Escribe para buscar proveedor..." autocomplete="off">
@@ -100,14 +103,17 @@
         const compraForm = document.getElementById('compra-form');
         const statusMessage = document.getElementById('status-message');
 
-        let proveedoresList = [];     
-        let catalogoProveedor = [];   
+        // data en memoria
+        let proveedoresList = [];      // {id, nombre}
+        let catalogoProveedor = [];    // catálogo del proveedor seleccionado: {id, nombre_producto, costo, ubicacion?}
 
+        // aca cargamos providers
         fetch('../compras')
             .then(r => r.ok ? r.json() : Promise.reject('No providers'))
             .then(data => proveedoresList = Array.isArray(data) ? data : [])
             .catch(err => { console.warn('No se pudieron cargar proveedores:', err); proveedoresList = []; });
 
+        // filtro provider
         function showProveedorSuggestions(filter) {
             const q = (filter || '').trim().toLowerCase();
             proveedorSuggestions.innerHTML = '';
@@ -124,6 +130,7 @@
                     proveedorInput.value = m.nombre;
                     proveedorIdInput.value = m.id;
                     proveedorSuggestions.style.display = 'none';
+                    // seleccion -> bajar catalogo
                     loadCatalogoDelProveedor(m.id);
                 });
                 proveedorSuggestions.appendChild(div);
@@ -136,11 +143,12 @@
             showProveedorSuggestions(e.target.value);
         });
 
+        // cerrar al click afuera
         document.addEventListener('click', (ev) => {
             if (!proveedorSuggestions.contains(ev.target) && ev.target !== proveedorInput) proveedorSuggestions.style.display = 'none';
         });
 
-        // GET /compras?proveedorId=ID
+        // trae catalogo del provider
         function loadCatalogoDelProveedor(proveedorId) {
             catalogoProveedor = [];
             if (!proveedorId) return;
@@ -148,7 +156,6 @@
                 .then(r => r.ok ? r.json() : Promise.reject('error catalogo'))
                 .then(data => {
                     catalogoProveedor = Array.isArray(data) ? data : [];
-                    // opcional: notificar si catálogo vacío
                     if (catalogoProveedor.length === 0) {
                         console.info('Proveedor seleccionado sin catálogo registrado');
                     }
@@ -159,7 +166,7 @@
                 });
         }
 
-        // helpers para selects de ubicación
+        // helpers ubicacion
         function crearSelectZona() {
             const s = document.createElement('select'); s.name = 'ubicacion_zona';
             const ph = document.createElement('option'); ph.value=''; ph.textContent='Zona'; s.appendChild(ph);
@@ -179,49 +186,51 @@
             return s;
         }
 
+        // crear row del detalle
         function crearRow() {
             const tr = document.createElement('tr');
 
-            // Producto input + suggestions
+            // producto + sugerencias
             const tdProd = document.createElement('td');
             const wrapper = document.createElement('div'); wrapper.className='relative';
             const inpProd = document.createElement('input');
             inpProd.type = 'text'; inpProd.name = 'producto'; inpProd.placeholder = 'Código o nombre'; inpProd.autocomplete = 'off';
             inpProd.required = true;
+            // hidden catalog id
             const inpCatalogId = document.createElement('input'); inpCatalogId.type='hidden'; inpCatalogId.name='catalogoId';
             const sugerencias = document.createElement('div'); sugerencias.className='autocomplete-list'; sugerencias.style.display='none';
             wrapper.appendChild(inpProd); wrapper.appendChild(inpCatalogId); wrapper.appendChild(sugerencias);
             tdProd.appendChild(wrapper);
 
-            // Cantidad
+            // cantidad
             const tdCant = document.createElement('td');
             const inpCant = document.createElement('input'); inpCant.type='number'; inpCant.name='cantidad'; inpCant.min='1'; inpCant.value='1';
             tdCant.appendChild(inpCant);
 
-            // Precio unitario
+            // precio
             const tdPrecio = document.createElement('td');
             const inpPrecio = document.createElement('input'); inpPrecio.type='number'; inpPrecio.name='precio_unitario'; inpPrecio.step='0.01'; inpPrecio.value='0.00';
             tdPrecio.appendChild(inpPrecio);
 
-            // Ubicación selects
+            // ubicacion
             const tdUbic = document.createElement('td');
             const ubicContainer = document.createElement('div'); ubicContainer.className='ubicacion-grid';
             const selZ = crearSelectZona(); const selR = crearSelectRack(); const selA = crearSelectAltura();
             ubicContainer.appendChild(selZ); ubicContainer.appendChild(selR); ubicContainer.appendChild(selA);
             tdUbic.appendChild(ubicContainer);
 
-            // Preview
+            // preview
             const tdPrev = document.createElement('td');
             const prevDiv = document.createElement('div'); prevDiv.className='ubicacion-preview'; prevDiv.textContent='';
             tdPrev.appendChild(prevDiv);
 
-            // Acción
+            // accion
             const tdAcc = document.createElement('td');
             const removeBtn = document.createElement('button'); removeBtn.type='button'; removeBtn.className='small-btn'; removeBtn.textContent='Quitar';
             removeBtn.addEventListener('click', () => tr.remove());
             tdAcc.appendChild(removeBtn);
 
-            // Eventos
+            // events
             function updatePreview() {
                 const z = selZ.value, r = selR.value, a = selA.value;
                 if (!z && !r && !a) prevDiv.textContent = '';
@@ -232,11 +241,12 @@
             selR.addEventListener('change', updatePreview);
             selA.addEventListener('change', updatePreview);
 
+            // autocomplete producto
             inpProd.addEventListener('input', (e) => {
                 sugerencias.innerHTML = '';
                 const q = (e.target.value || '').trim().toLowerCase();
                 if (!q || catalogoProveedor.length === 0) { sugerencias.style.display = 'none'; return; }
-                // buscar coincidencias
+                // match por nombre o id
                 const matches = catalogoProveedor.filter(p =>
                     p.nombre_producto.toLowerCase().includes(q) ||
                     String(p.id).startsWith(q)
@@ -252,13 +262,14 @@
                     div.dataset.costo = m.costo;
                     if (m.ubicacion) div.dataset.ubicacion = m.ubicacion;
                     div.addEventListener('click', () => {
+                        // set en fila
                         inpProd.value = m.nombre_producto;
                         inpCatalogId.value = m.id;
                         if (typeof m.costo !== 'undefined') inpPrecio.value = Number(m.costo).toFixed(2);
+                        // si viene ubicacion, parseamos rapido
                         if (m.ubicacion) {
                             const u = String(m.ubicacion).trim();
                             const parts = u.split('/');
-                            // esperar formato Px / Rx / A
                             try {
                                 if (parts.length === 3) {
                                     const p = parts[0].replace(/^P/i,'').trim();
@@ -269,7 +280,7 @@
                                     if (a) selA.value = a;
                                     updatePreview();
                                 }
-                            } catch(e) { /* ignorar parse errors */ }
+                            } catch(e) { }
                         }
                         sugerencias.style.display = 'none';
                     });
@@ -278,10 +289,12 @@
                 sugerencias.style.display = 'block';
             });
 
+            // click fuera cierra sugerencias
             document.addEventListener('click', (ev) => {
                 if (!sugerencias.contains(ev.target) && ev.target !== inpProd) sugerencias.style.display = 'none';
             });
 
+            // si el usuario pega un valor y sale (`change`) intentamos autoseleccionar si hay match exacto
             inpProd.addEventListener('change', () => {
                 const val = (inpProd.value || '').trim();
                 if (!val) return;
@@ -304,6 +317,7 @@
             return tr;
         }
 
+        // botón añadir linea
         addDetailBtn.addEventListener('click', () => {
             const row = crearRow();
             detallesTbody.appendChild(row);
@@ -311,6 +325,7 @@
             window.scrollTo({ top: row.offsetTop - 100, behavior: 'smooth' });
         });
 
+        // agregar una fila inicial
         detallesTbody.appendChild(crearRow());
 
         // validar ubicacion fila
@@ -368,7 +383,7 @@
                 if (!validarUbicacionFila(tr)) { alert('Hay una ubicación incompleta en una línea. Llena Zona,Rack y Altura o déjalas todas vacías.'); return; }
             }
 
-            // construir payload 
+            // construir payload (ComprasServlet espera proveedorId y detalles en items)
             const payload = {
                 proveedorId: proveedorId,
                 codigo_compra: (document.getElementById('codigo-compra').value || '').trim() || null,

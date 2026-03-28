@@ -7,7 +7,7 @@ import java.sql.SQLException;
 public class DatabaseConnection {
     private static final String URL = "jdbc:mysql://localhost:3306/login_db?useUnicode=true&characterEncoding=UTF-8";
     private static final String USER = "root";
-    private static final String PASSWORD = "Your Password must go here"; // Tu contraseña
+    private static final String PASSWORD = "sch4tzi"; // Tu contraseña
 
     public static Connection getConnection() throws SQLException {
         try {

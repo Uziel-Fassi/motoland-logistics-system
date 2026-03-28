@@ -79,7 +79,7 @@
                     row.style.color = '#888';
                 }
 
-                // ubicacion: mostrar '-' si vacío
+                // ubicacion fallback
                 const ubic = t.ubicacion && t.ubicacion.length ? t.ubicacion : '-';
 
                 row.innerHTML = `
@@ -100,7 +100,7 @@
             try {
                 const res = await fetch('../historial');
                 if (!res.ok) {
-                    // intentar leer cuerpo con texto para mostrar en consola
+                    // log rapido para debug
                     const text = await res.text();
                     console.error('Historial request failed. Status:', res.status, 'Response body:', text);
                     tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; color:red;">Error al cargar los datos.</td></tr>';
@@ -117,12 +117,12 @@
 
         searchInput.addEventListener('input', () => {
             const q = searchInput.value.trim().toLowerCase();
-            const filtered = allTransactions.filter(t => {
-                return (t.tipo && t.tipo.toLowerCase().includes(q)) ||
-                    (t.codigo && t.codigo.toLowerCase().includes(q)) ||
-                    (t.detalle && t.detalle.toLowerCase().includes(q)) ||
-                    (t.estado && t.estado.toLowerCase().includes(q)) ||
-                    (t.ubicacion && t.ubicacion.toLowerCase().includes(q));
+            const filtered = allTransactions.filter(tx => {
+                return (tx.tipo && tx.tipo.toLowerCase().includes(q)) ||
+                    (tx.codigo && tx.codigo.toLowerCase().includes(q)) ||
+                    (tx.detalle && tx.detalle.toLowerCase().includes(q)) ||
+                    (tx.estado && tx.estado.toLowerCase().includes(q)) ||
+                    (tx.ubicacion && tx.ubicacion.toLowerCase().includes(q));
             });
             renderTable(filtered);
         });

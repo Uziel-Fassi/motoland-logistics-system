@@ -16,6 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+// models para manejar la información
+
+// incluye ubication of the product
 class ProductoVenta {
     private String nombre;
     private String ubicacion;
@@ -32,6 +35,7 @@ class ProductoVenta {
     }
 }
 
+// Para la respuesta del GET que incluye los datos de la venta
 class VentaParaFacturar {
     private int ventaId;
     private String codigoVenta;
@@ -52,7 +56,7 @@ class ItemAdicional {
     String descripcion;
     int cantidad;
     double montoUnitario;
-    String tipo; 
+    String tipo; // "ADICION" o "DEDUCCION"
 }
 
 @WebServlet("/facturacion")
@@ -119,7 +123,7 @@ public class FacturacionServlet extends HttpServlet {
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     String nombre = rs.getString("nombre");
-                    String ubicacion = rs.getString("ubicacion");
+                    String ubicacion = rs.getString("ubicacion"); // puede ser NULL
                     int cantidad = rs.getInt("cantidad");
                     double precioUnitario = rs.getDouble("precio_unitario");
                     double subtotal = rs.getDouble("subtotal");
@@ -140,9 +144,11 @@ public class FacturacionServlet extends HttpServlet {
         Connection conn = null;
 
         try {
+            // read json
             Type type = new TypeToken<Map<String, Object>>(){}.getType();
             Map<String, Object> payload = gson.fromJson(request.getReader(), type);
 
+            // conversiones seguras usando Number
             Number ventaIdNum = (Number) payload.get("ventaId");
             if (ventaIdNum == null) throw new IllegalArgumentException("ventaId es requerido");
             int ventaId = ventaIdNum.intValue();
@@ -157,8 +163,9 @@ public class FacturacionServlet extends HttpServlet {
             if (itemsAdicionales == null) itemsAdicionales = new ArrayList<>();
 
             conn = DatabaseConnection.getConnection();
-            conn.setAutoCommit(false);
+            conn.setAutoCommit(false); 
 
+            // 1. Calculamos totales en el backend para seguridad
             double subtotalProductos = 0;
             String sqlSubtotal = "SELECT IFNULL(SUM(subtotal),0) as total FROM detalle_ventas WHERE venta_id = ?";
             try(PreparedStatement stmt = conn.prepareStatement(sqlSubtotal)) {
@@ -179,6 +186,7 @@ public class FacturacionServlet extends HttpServlet {
             double montoImpuestos = baseImponible * (tasaImpuesto / 100.0);
             double totalFinal = baseImponible + montoImpuestos;
 
+            // 2. Insertamos la factura principal
             long facturaId = 0;
             String sqlFactura = "INSERT INTO facturas (venta_id, tasa_impuesto, descuento_global, subtotal_productos, total_adicionales, monto_impuestos, total_final) VALUES (?, ?, ?, ?, ?, ?, ?)";
             try (PreparedStatement stmt = conn.prepareStatement(sqlFactura, Statement.RETURN_GENERATED_KEYS)) {
@@ -195,6 +203,7 @@ public class FacturacionServlet extends HttpServlet {
                 }
             }
 
+            // 3. Generamos y actualizamos el código de factura
             String codigoFactura = "FACT-" + facturaId;
             String sqlUpdateCodigo = "UPDATE facturas SET codigo_factura = ? WHERE id = ?";
             try (PreparedStatement stmt = conn.prepareStatement(sqlUpdateCodigo)) {
@@ -203,6 +212,7 @@ public class FacturacionServlet extends HttpServlet {
                 stmt.executeUpdate();
             }
 
+            // 4. Insertamos los ítems adicionales
             if (!itemsAdicionales.isEmpty()) {
                 String sqlItems = "INSERT INTO factura_items_adicionales (factura_id, descripcion, cantidad, monto_unitario, tipo) VALUES (?, ?, ?, ?, ?)";
                 try (PreparedStatement stmt = conn.prepareStatement(sqlItems)) {
@@ -218,13 +228,14 @@ public class FacturacionServlet extends HttpServlet {
                 }
             }
 
+            // 5. Actualizamos el estado de la venta
             String sqlUpdateVenta = "UPDATE ventas SET estado_facturacion = 'Facturada' WHERE id = ?";
             try (PreparedStatement stmt = conn.prepareStatement(sqlUpdateVenta)) {
                 stmt.setInt(1, ventaId);
                 stmt.executeUpdate();
             }
 
-            conn.commit(); 
+            conn.commit(); // Si todo salió bien, confirmamos los cambios
             response.getWriter().write("{\"status\":\"success\", \"message\":\"Factura " + codigoFactura + " generada exitosamente.\"}");
 
         } catch (Exception e) {
