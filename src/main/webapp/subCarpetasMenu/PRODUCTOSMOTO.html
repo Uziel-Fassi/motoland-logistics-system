@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Inventario de Productos - MOTOLAND</title>
+    <title>Product Inventory - MOTOLAND</title>
     <link rel="stylesheet" href="../style.css" />
     <style>
         .inventario-container { background-color: #f9f9f9; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
@@ -22,21 +22,21 @@
 <body>
 <div class="container">
     <header class="menu-header">
-        <h1>Inventario de Productos</h1>
-        <button onclick="window.location.href='../menu.html'">Volver al Menú</button>
+        <h1>Product Inventory</h1>
+        <button onclick="window.location.href='../menu.html'">Back to Menu</button>
     </header>
 
     <div class="inventario-container">
-        <input type="text" id="search-input" placeholder="Buscar por código o nombre de producto..." />
+        <input type="text" id="search-input" placeholder="Search by product code or name..." />
 
         <table id="inventario-table">
             <thead>
             <tr>
-                <th>Código</th>
-                <th>Nombre del Producto</th>
-                <th>Ubicación</th>
-                <th>Precio de Venta (Bs.)</th>
-                <th>Stock Actual</th>
+                <th>Code</th>
+                <th>Product Name</th>
+                <th>Location</th>
+                <th>Sale Price (Bs.)</th>
+                <th>Current Stock</th>
             </tr>
             </thead>
             <tbody id="inventario-tbody"></tbody>
@@ -91,7 +91,7 @@
         function renderTable(products) {
             tbody.innerHTML = '';
             if (!products || products.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">No hay productos en el inventario.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">No products in inventory.</td></tr>';
                 return;
             }
             products.forEach(p => {

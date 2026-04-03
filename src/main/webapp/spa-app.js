@@ -88,10 +88,10 @@
 
     function formatDate(d) {
         if (!d) return '';
-        try { return new Date(d).toLocaleString('es-BO'); } catch { return d; }
+        try { return new Date(d).toLocaleString('en-US'); } catch { return d; }
     }
     function crearSelectZona() {
-        let h = '<select class="form-control" name="ubicacion_zona"><option value="">Zona</option>';
+        let h = '<select class="form-control" name="ubicacion_zona"><option value="">Zone</option>';
         for (let i = 1; i <= 4; i++) h += `<option value="${i}">P${i}</option>`;
         return h + '</select>';
     }
@@ -102,7 +102,7 @@
     }
     function crearSelectAltura() {
         return `<select class="form-control" name="ubicacion_altura">
-            <option value="">Altura</option>
+            <option value="">Height</option>
             <option value="A">A</option><option value="B">B</option>
             <option value="C">C</option><option value="D">D</option><option value="E">E</option>
         </select>`;
@@ -116,15 +116,15 @@
         sidebar.classList.remove('open');
         sidebarOverlay.classList.remove('show');
         const titles = {
-            dashboard: 'Panel Principal',
-            productos: 'Inventario de Productos',
-            proveedores: 'Gestión de Proveedores',
-            clientes: 'Gestión de Clientes',
-            ventas: 'Registro de Ventas',
-            compras: 'Registro de Compras',
-            devoluciones: 'Procesar Devoluciones',
-            historial: 'Historial de Transacciones',
-            facturacion: 'Módulo de Facturación'
+            dashboard: 'Dashboard',
+            productos: 'Product Inventory',
+            proveedores: 'Supplier Management',
+            clientes: 'Customer Management',
+            ventas: 'Sales Register',
+            compras: 'Purchase Register',
+            devoluciones: 'Process Returns',
+            historial: 'Transaction History',
+            facturacion: 'Billing Module'
         };
 
         topbarTitle.textContent = titles[view] || 'Motoland';
@@ -146,7 +146,7 @@
         if (fn) {
             fn();
         } else {
-            contentArea.innerHTML = '<div class="empty-state"><div class="empty-icon"><i data-lucide="wrench"></i></div><p>M\u00f3dulo no encontrado</p></div>';
+            contentArea.innerHTML = '<div class="empty-state"><div class="empty-icon"><i data-lucide="wrench"></i></div><p>Module not found</p></div>';
         }
         if (window.lucide) window.lucide.createIcons();
         history.replaceState(null, '', '#' + view);
@@ -178,35 +178,35 @@
     function renderDashboard() {
         contentArea.innerHTML = `
         <div class="view-enter">
-            <h1 class="section-title">Bienvenido a Motoland S.A.</h1>
-            <p class="section-subtitle">Sistema de Gestión de Inventario — Selecciona un módulo del menú lateral para comenzar.</p>
+            <h1 class="section-title">Welcome to Motoland S.A.</h1>
+            <p class="section-subtitle">Inventory Management System — Select a module from the side menu to get started.</p>
 
             <div class="dashboard-grid" id="dash-stats">
                 <div class="stat-card" data-goto="productos">
                     <div class="stat-icon blue"><i data-lucide="package"></i></div>
-                    <div class="stat-info"><h3 id="dash-prod-count">—</h3><p>Productos en inventario</p></div>
+                    <div class="stat-info"><h3 id="dash-prod-count">—</h3><p>Products in inventory</p></div>
                 </div>
                 <div class="stat-card" data-goto="clientes">
                     <div class="stat-icon green"><i data-lucide="users"></i></div>
-                    <div class="stat-info"><h3 id="dash-cli-count">—</h3><p>Clientes registrados</p></div>
+                    <div class="stat-info"><h3 id="dash-cli-count">—</h3><p>Registered customers</p></div>
                 </div>
                 <div class="stat-card" data-goto="historial">
                     <div class="stat-icon orange"><i data-lucide="bar-chart-2"></i></div>
-                    <div class="stat-info"><h3 id="dash-hist-count">—</h3><p>Transacciones totales</p></div>
+                    <div class="stat-info"><h3 id="dash-hist-count">—</h3><p>Total transactions</p></div>
                 </div>
                 <div class="stat-card" data-goto="ventas">
                     <div class="stat-icon red"><i data-lucide="tag"></i></div>
-                    <div class="stat-info"><h3>Ventas</h3><p>Registrar nueva venta</p></div>
+                    <div class="stat-info"><h3>Sales</h3><p>Register new sale</p></div>
                 </div>
             </div>
 
             <div class="card">
-                <div class="card-header"><h2>Acceso Rápido</h2></div>
+                <div class="card-header"><h2>Quick Access</h2></div>
                 <div class="dashboard-grid">
-                    <button class="btn btn-primary btn-block" onclick="window._spa.nav('compras')"><i data-lucide="shopping-cart"></i> Nueva Compra</button>
-                    <button class="btn btn-success btn-block" onclick="window._spa.nav('ventas')"><i data-lucide="tag"></i> Nueva Venta</button>
-                    <button class="btn btn-outline btn-block" onclick="window._spa.nav('facturacion')"><i data-lucide="receipt"></i> Facturación</button>
-                    <button class="btn btn-outline btn-block" onclick="window._spa.nav('devoluciones')"><i data-lucide="undo-2"></i> Devoluciones</button>
+                    <button class="btn btn-primary btn-block" onclick="window._spa.nav('compras')"><i data-lucide="shopping-cart"></i> New Purchase</button>
+                    <button class="btn btn-success btn-block" onclick="window._spa.nav('ventas')"><i data-lucide="tag"></i> New Sale</button>
+                    <button class="btn btn-outline btn-block" onclick="window._spa.nav('facturacion')"><i data-lucide="receipt"></i> Billing</button>
+                    <button class="btn btn-outline btn-block" onclick="window._spa.nav('devoluciones')"><i data-lucide="undo-2"></i> Returns</button>
                 </div>
             </div>
         </div>`;
@@ -231,25 +231,25 @@
     function renderProductos() {
         contentArea.innerHTML = `
         <div class="view-enter">
-            <h1 class="section-title">Inventario de Productos</h1>
-            <p class="section-subtitle">Catálogo completo con ubicación en almacén, precios y stock actual.</p>
+            <h1 class="section-title">Product Inventory</h1>
+            <p class="section-subtitle">Full catalog with warehouse location, prices and current stock.</p>
 
             <div class="card">
                 <div class="search-filter">
-                    <input type="text" id="prod-search" placeholder="Buscar por código o nombre de producto...">
+                    <input type="text" id="prod-search" placeholder="Search by product code or name...">
                 </div>
                 <div class="table-wrapper">
                     <table class="data-table">
                         <thead>
                             <tr>
-                                <th>Código</th>
-                                <th>Nombre del Producto</th>
-                                <th>Ubicación</th>
-                                <th class="right">Precio Venta (Bs.)</th>
+                                <th>Code</th>
+                                <th>Product Name</th>
+                                <th>Location</th>
+                                <th class="right">Sale Price (Bs.)</th>
                                 <th class="center">Stock</th>
                             </tr>
                         </thead>
-                        <tbody id="prod-tbody"><tr><td colspan="5" class="center">Cargando...</td></tr></tbody>
+                        <tbody id="prod-tbody"><tr><td colspan="5" class="center">Loading...</td></tr></tbody>
                     </table>
                 </div>
             </div>
@@ -273,7 +273,7 @@
             const tbody = document.getElementById('prod-tbody');
             if (!tbody) return;
             if (!products.length) {
-                tbody.innerHTML = '<tr><td colspan="5" class="center" style="color:var(--text-muted)">No hay productos en el inventario.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="5" class="center" style="color:var(--text-muted)">No products in inventory.</td></tr>';
                 return;
             }
             tbody.innerHTML = products.map(p => {
@@ -294,7 +294,7 @@
             .then(d => { allProducts = Array.isArray(d)?d:[]; renderTable(allProducts); })
             .catch(() => {
                 const tb = document.getElementById('prod-tbody');
-                if (tb) tb.innerHTML = '<tr><td colspan="5" class="center" style="color:var(--color-red)">Error al cargar datos.</td></tr>';
+                if (tb) tb.innerHTML = '<tr><td colspan="5" class="center" style="color:var(--color-red)">Failed to load data.</td></tr>';
             });
 
         contentArea.querySelector('#prod-search').addEventListener('input', function() {
@@ -306,36 +306,36 @@
     function renderClientes() {
         contentArea.innerHTML = `
         <div class="view-enter">
-            <h1 class="section-title">Gestión de Clientes</h1>
-            <p class="section-subtitle">Registra nuevos clientes y consulta la lista completa.</p>
+            <h1 class="section-title">Customer Management</h1>
+            <p class="section-subtitle">Register new customers and view the full list.</p>
 
             <div class="card" style="margin-bottom:20px">
-                <div class="card-header"><h2>Registrar Nuevo Cliente</h2></div>
+                <div class="card-header"><h2>Register New Customer</h2></div>
                 <form id="cli-form">
                     <div class="form-row">
                         <div class="form-group">
-                            <label>Nombre</label>
-                            <input class="form-control" type="text" name="nombre" required placeholder="Nombre completo">
+                            <label>Name</label>
+                            <input class="form-control" type="text" name="nombre" required placeholder="Full name">
                         </div>
                         <div class="form-group">
-                            <label>Contacto</label>
-                            <input class="form-control" type="text" name="contacto" required placeholder="Teléfono o email">
+                            <label>Contact</label>
+                            <input class="form-control" type="text" name="contacto" required placeholder="Phone or email">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label>Dirección</label>
-                        <input class="form-control" type="text" name="direccion" required placeholder="Dirección completa">
+                        <label>Address</label>
+                        <input class="form-control" type="text" name="direccion" required placeholder="Full address">
                     </div>
-                    <button type="submit" class="btn btn-primary btn-block">Guardar Cliente</button>
+                    <button type="submit" class="btn btn-primary btn-block">Save Customer</button>
                 </form>
             </div>
 
             <div class="card">
-                <div class="card-header"><h2>Clientes Registrados</h2></div>
+                <div class="card-header"><h2>Registered Customers</h2></div>
                 <div class="table-wrapper">
                     <table class="data-table">
-                        <thead><tr><th>Nombre</th><th>Contacto</th><th>Dirección</th></tr></thead>
-                        <tbody id="cli-tbody"><tr><td colspan="3" class="center">Cargando...</td></tr></tbody>
+                        <thead><tr><th>Name</th><th>Contact</th><th>Address</th></tr></thead>
+                        <tbody id="cli-tbody"><tr><td colspan="3" class="center">Loading...</td></tr></tbody>
                     </table>
                 </div>
             </div>
@@ -345,7 +345,7 @@
             fetch(API + 'clientes').then(r=>r.json()).then(data => {
                 const tb = document.getElementById('cli-tbody');
                 if (!tb) return;
-                if (!data.length) { tb.innerHTML = '<tr><td colspan="3" class="center" style="color:var(--text-muted)">No hay clientes registrados.</td></tr>'; return; }
+                if (!data.length) { tb.innerHTML = '<tr><td colspan="3" class="center" style="color:var(--text-muted)">No customers registered.</td></tr>'; return; }
                 tb.innerHTML = data.map(c => `<tr><td>${esc(c.nombre)}</td><td>${esc(c.contacto)}</td><td>${esc(c.direccion)}</td></tr>`).join('');
             }).catch(() => {});
         }
@@ -357,45 +357,45 @@
             fetch(API + 'clientes', { method:'POST', body: new URLSearchParams(fd) })
                 .then(r=>r.json())
                 .then(d => {
-                    showToast(d.message || 'Cliente registrado.', d.status==='success');
+                    showToast(d.message || 'Customer registered.', d.status==='success');
                     if (d.status==='success') { this.reset(); loadClientes(); }
                 })
-                .catch(() => showToast('Error de conexión.', false));
+                .catch(() => showToast('Connection error.', false));
         });
     }
 
     function renderProveedores() {
         contentArea.innerHTML = `
         <div class="view-enter">
-            <h1 class="section-title">Gestión de Proveedores</h1>
-            <p class="section-subtitle">Registra proveedores con su catálogo de productos.</p>
+            <h1 class="section-title">Supplier Management</h1>
+            <p class="section-subtitle">Register suppliers with their product catalog.</p>
 
             <div class="card">
                 <form id="prov-form" autocomplete="off">
                     <div class="form-row">
                         <div class="form-group">
-                            <label>Nombre del Proveedor</label>
-                            <input class="form-control" id="prov-nombre" type="text" required placeholder="Ej: Importadora El Veloz">
+                            <label>Supplier Name</label>
+                            <input class="form-control" id="prov-nombre" type="text" required placeholder="e.g.: Fast Imports Ltd.">
                         </div>
                         <div class="form-group">
-                            <label>Contacto</label>
-                            <input class="form-control" id="prov-contacto" type="text" placeholder="Teléfono / email">
+                            <label>Contact</label>
+                            <input class="form-control" id="prov-contacto" type="text" placeholder="Phone / email">
                         </div>
                     </div>
 
                     <div style="margin-top:8px">
-                        <label style="display:block;font-size:13px;font-weight:600;color:var(--text-secondary);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px">Catálogo de Productos</label>
+                        <label style="display:block;font-size:13px;font-weight:600;color:var(--text-secondary);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px">Product Catalog</label>
                         <div style="display:flex;gap:8px;align-items:center;margin-bottom:10px;flex-wrap:wrap">
-                            <button type="button" id="prov-add-item" class="btn btn-primary btn-sm">+ Añadir producto</button>
-                            <button type="button" id="prov-generate" class="btn btn-outline btn-sm">Generar N campos</button>
+                            <button type="button" id="prov-add-item" class="btn btn-primary btn-sm">+ Add product</button>
+                            <button type="button" id="prov-generate" class="btn btn-outline btn-sm">Generate N fields</button>
                             <input type="number" id="prov-cant" min="1" value="1" class="form-control" style="width:80px">
-                            <button type="button" id="prov-clear" class="btn btn-outline btn-sm">Limpiar</button>
+                            <button type="button" id="prov-clear" class="btn btn-outline btn-sm">Clear</button>
                         </div>
                         <div id="prov-catalogo" class="catalogo-list"></div>
                     </div>
 
                     <div style="margin-top:16px;display:flex;justify-content:flex-end">
-                        <button type="submit" class="btn btn-primary">Registrar Proveedor y Catálogo</button>
+                        <button type="submit" class="btn btn-primary">Register Supplier &amp; Catalog</button>
                     </div>
                 </form>
             </div>
@@ -407,10 +407,10 @@
             const w = document.createElement('div');
             w.className = 'catalogo-item';
             w.innerHTML = `
-                <input class="form-control" type="text" name="cat-nombre" placeholder="Nombre del producto" value="${esc(n)}" required>
-                <textarea class="form-control" name="cat-desc" placeholder="Descripción (opcional)" style="min-height:40px">${esc(d)}</textarea>
-                <input class="form-control" type="number" name="cat-costo" step="0.01" placeholder="Costo" value="${c}" style="width:120px">
-                <button type="button" class="btn btn-red btn-sm cat-remove" title="Eliminar">✕</button>`;
+                <input class="form-control" type="text" name="cat-nombre" placeholder="Product name" value="${esc(n)}" required>
+                <textarea class="form-control" name="cat-desc" placeholder="Description (optional)" style="min-height:40px">${esc(d)}</textarea>
+                <input class="form-control" type="number" name="cat-costo" step="0.01" placeholder="Cost" value="${c}" style="width:120px">
+                <button type="button" class="btn btn-red btn-sm cat-remove" title="Remove">✕</button>`;
             w.querySelector('.cat-remove').addEventListener('click', () => w.remove());
             catEl.appendChild(w);
         }
@@ -419,7 +419,7 @@
 
         document.getElementById('prov-add-item').addEventListener('click', () => crearItem());
         document.getElementById('prov-clear').addEventListener('click', () => {
-            if (confirm('¿Limpiar todo el catálogo?')) { catEl.innerHTML=''; crearItem(); }
+            if (confirm('Clear the entire catalog?')) { catEl.innerHTML=''; crearItem(); }
         });
         document.getElementById('prov-generate').addEventListener('click', () => {
             const n = parseInt(document.getElementById('prov-cant').value) || 1;
@@ -431,7 +431,7 @@
             e.preventDefault();
             const nombre = document.getElementById('prov-nombre').value.trim();
             const contacto = document.getElementById('prov-contacto').value.trim();
-            if (!nombre) { showToast('Nombre del proveedor requerido.', false); return; }
+            if (!nombre) { showToast('Supplier name is required.', false); return; }
 
             const catalogo = [];
             catEl.querySelectorAll('.catalogo-item').forEach(row => {
@@ -448,51 +448,51 @@
             })
             .then(r => r.json())
             .then(d => {
-                showToast(d.message || 'Proveedor registrado.', d.status==='success');
+                showToast(d.message || 'Supplier registered.', d.status==='success');
                 if (d.status==='success') { this.reset(); catEl.innerHTML=''; crearItem(); }
             })
-            .catch(() => showToast('Error de conexión.', false));
+            .catch(() => showToast('Connection error.', false));
         });
     }
 
     function renderVentas() {
         contentArea.innerHTML = `
         <div class="view-enter">
-            <h1 class="section-title">Registro de Ventas</h1>
-            <p class="section-subtitle">Busca productos, arma tu carrito y registra la venta.</p>
+            <h1 class="section-title">Sales Register</h1>
+            <p class="section-subtitle">Search products, build your cart and register the sale.</p>
 
             <div class="card" style="margin-bottom:20px">
-                <div class="card-header"><h2>Añadir Producto</h2></div>
+                <div class="card-header"><h2>Add Product</h2></div>
                 <div class="form-group">
-                    <label>Buscar Producto</label>
+                    <label>Search Product</label>
                     <div class="autocomplete-wrapper">
-                        <input class="form-control" id="v-search" type="text" placeholder="Escribe para buscar (ej: Casco, Llanta)..." autocomplete="off">
+                        <input class="form-control" id="v-search" type="text" placeholder="Type to search (e.g.: Helmet, Tire)..." autocomplete="off">
                         <div id="v-results" class="autocomplete-list"></div>
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
-                        <label>Cantidad</label>
+                        <label>Quantity</label>
                         <input class="form-control" id="v-cantidad" type="number" min="1" value="1">
                     </div>
                     <div class="form-group">
-                        <label>Cliente</label>
-                        <select class="form-control" id="v-cliente"><option value="">Cliente general</option></select>
+                        <label>Customer</label>
+                        <select class="form-control" id="v-cliente"><option value="">General customer</option></select>
                     </div>
                 </div>
-                <button id="v-add-btn" class="btn btn-primary btn-block">Añadir a la Venta</button>
+                <button id="v-add-btn" class="btn btn-primary btn-block">Add to Sale</button>
             </div>
 
             <div class="card">
-                <div class="card-header"><h2>Detalle de Venta Actual</h2></div>
+                <div class="card-header"><h2>Current Sale Detail</h2></div>
                 <div class="table-wrapper">
                     <table class="data-table" id="v-table">
-                        <thead><tr><th>Producto</th><th class="center">Cantidad</th><th class="right">Precio Unit. (Bs.)</th><th class="center">Stock</th><th class="right">Subtotal</th><th class="center">Acción</th></tr></thead>
+                        <thead><tr><th>Product</th><th class="center">Quantity</th><th class="right">Unit Price (Bs.)</th><th class="center">Stock</th><th class="right">Subtotal</th><th class="center">Action</th></tr></thead>
                         <tbody id="v-tbody"></tbody>
                     </table>
                 </div>
                 <div class="total-display">TOTAL: Bs. <span id="v-total">0.00</span></div>
-                <button id="v-registrar" class="btn btn-success btn-block" style="margin-top:12px">Registrar Venta</button>
+                <button id="v-registrar" class="btn btn-success btn-block" style="margin-top:12px">Register Sale</button>
             </div>
         </div>`;
 
@@ -512,7 +512,7 @@
             fetch(API + 'ventas').then(r=>r.json()).then(d => { productosList = Array.isArray(d)?d:[]; }).catch(() => {});
             fetch(API + 'clientes').then(r=>r.json()).then(d => {
                 clienteList = Array.isArray(d)?d:[];
-                clienteSelect.innerHTML = '<option value="">Cliente general</option>';
+                clienteSelect.innerHTML = '<option value="">General customer</option>';
                 clienteList.forEach(c => {
                     const opt = document.createElement('option');
                     opt.value = c.id != null ? c.id : '';
@@ -549,9 +549,9 @@
 
         // Add to cart
         document.getElementById('v-add-btn').addEventListener('click', () => {
-            if (!selectedProduct) { showToast('Selecciona un producto de la lista.', false); inputSearch.focus(); return; }
+            if (!selectedProduct) { showToast('Select a product from the list.', false); inputSearch.focus(); return; }
             const cantidad = parseInt(cantidadInput.value)||0;
-            if (cantidad<=0) { showToast('Ingresa una cantidad válida.', false); return; }
+            if (cantidad<=0) { showToast('Enter a valid quantity.', false); return; }
             const item = {
                 productoId: selectedProduct.id, nombre: selectedProduct.nombre, codigo: selectedProduct.codigo,
                 precioUnitario: Number(selectedProduct.precioVenta||selectedProduct.precio_venta||0),
@@ -578,7 +578,7 @@
                     <td class="right"></td>
                     <td class="center${stockWarn}">${it.stock!=null?it.stock:'-'}</td>
                     <td class="right">${sub.toFixed(2)}</td>
-                    <td class="center"><button class="btn btn-red btn-sm v-remove-btn">Quitar</button></td>`;
+                    <td class="center"><button class="btn btn-red btn-sm v-remove-btn">Remove</button></td>`;
 
                 // Inline editable inputs
                 const inpCant = document.createElement('input');
@@ -600,51 +600,51 @@
 
         // Register sale
         document.getElementById('v-registrar').addEventListener('click', async () => {
-            if (!carrito.length) { showToast('No hay productos en la venta.', false); return; }
+            if (!carrito.length) { showToast('No products in the sale.', false); return; }
             const clienteId = clienteSelect.value ? parseInt(clienteSelect.value) : null;
             const items = carrito.map(it => ({ productoId:it.productoId, cantidad:it.cantidad, precioUnitario:it.precioUnitario }));
             try {
                 const res = await fetch(API + 'ventas', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({clienteId, items}) });
                 const body = await res.json().catch(()=>({}));
-                if (!res.ok) { showToast(body.message||'Error al registrar venta.', false); return; }
-                showToast(body.message||'Venta registrada con éxito.', true);
+                if (!res.ok) { showToast(body.message||'Error registering sale.', false); return; }
+                showToast(body.message||'Sale registered successfully.', true);
                 carrito = []; renderCarrito(); loadData();
-            } catch { showToast('Error de conexión.', false); }
+            } catch { showToast('Connection error.', false); }
         });
     }
 
     function renderCompras() {
         contentArea.innerHTML = `
         <div class="view-enter">
-            <h1 class="section-title">Registro de Compras</h1>
-            <p class="section-subtitle">Registra compras a proveedores y actualiza el inventario automáticamente.</p>
+            <h1 class="section-title">Purchase Register</h1>
+            <p class="section-subtitle">Register purchases from suppliers and automatically update inventory.</p>
 
             <form id="c-form" novalidate>
                 <div class="card" style="margin-bottom:20px">
-                    <div class="card-header"><h2>1. Datos de la Compra</h2></div>
+                    <div class="card-header"><h2>1. Purchase Details</h2></div>
                     <div class="form-group">
-                        <label>Código de Compra (opcional)</label>
-                        <input class="form-control" id="c-codigo" type="text" placeholder="Ej: COMPRA-123">
+                        <label>Purchase Code (optional)</label>
+                        <input class="form-control" id="c-codigo" type="text" placeholder="e.g.: PURCHASE-123">
                     </div>
                     <div class="form-group">
-                        <label>Proveedor</label>
+                        <label>Supplier</label>
                         <div class="autocomplete-wrapper">
-                            <input class="form-control" id="c-prov-input" type="text" placeholder="Escribe para buscar proveedor..." autocomplete="off">
+                            <input class="form-control" id="c-prov-input" type="text" placeholder="Type to search supplier..." autocomplete="off">
                             <input type="hidden" id="c-prov-id" value="">
                             <div id="c-prov-suggestions" class="autocomplete-list"></div>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label>Fecha</label>
+                            <label>Date</label>
                             <input class="form-control" id="c-fecha" type="datetime-local">
                         </div>
                         <div class="form-group">
-                            <label>Estado</label>
+                            <label>Status</label>
                             <select class="form-control" id="c-estado">
-                                <option value="Completada">Completada</option>
-                                <option value="Pendiente">Pendiente</option>
-                                <option value="Anulada">Anulada</option>
+                                <option value="Completada">Completed</option>
+                                <option value="Pendiente">Pending</option>
+                                <option value="Anulada">Cancelled</option>
                             </select>
                         </div>
                     </div>
@@ -652,14 +652,14 @@
 
                 <div class="card" style="margin-bottom:20px">
                     <div class="card-header">
-                        <h2>2. Detalle de Productos</h2>
-                        <button type="button" id="c-add-line" class="btn btn-primary btn-sm">+ Añadir Línea</button>
+                        <h2>2. Product Details</h2>
+                        <button type="button" id="c-add-line" class="btn btn-primary btn-sm">+ Add Line</button>
                     </div>
                     <div class="table-wrapper">
                         <table class="data-table">
                             <thead><tr>
-                                <th>Producto</th><th class="center">Cantidad</th><th class="right">Precio Unit. (Bs.)</th>
-                                <th>Ubicación (Zona/Rack/Altura)</th><th class="center">Vista</th><th class="center">Acción</th>
+                                <th>Product</th><th class="center">Quantity</th><th class="right">Unit Price (Bs.)</th>
+                                <th>Location (Zone/Rack/Height)</th><th class="center">Preview</th><th class="center">Action</th>
                             </tr></thead>
                             <tbody id="c-tbody"></tbody>
                         </table>
@@ -667,7 +667,7 @@
                 </div>
 
                 <div class="card" style="text-align:center">
-                    <button type="submit" class="btn btn-primary btn-block">Registrar Compra</button>
+                    <button type="submit" class="btn btn-primary btn-block">Register Purchase</button>
                 </div>
             </form>
         </div>`;
@@ -721,7 +721,7 @@
             const tr = document.createElement('tr');
             tr.innerHTML = `
                 <td><div class="autocomplete-wrapper">
-                    <input class="form-control" type="text" name="producto" placeholder="C\u00f3digo o nombre" autocomplete="off">
+                    <input class="form-control" type="text" name="producto" placeholder="Code or name" autocomplete="off">
                     <input type="hidden" name="catalogoId">
                 </div></td>
                 <td class="center"><input class="form-control" type="number" name="cantidad" min="1" value="1" style="width:70px"></td>
@@ -802,10 +802,10 @@
         document.getElementById('c-form').addEventListener('submit', function(e) {
             e.preventDefault();
             const provId = provIdInput.value ? parseInt(provIdInput.value) : null;
-            if (!provId) { showToast('Selecciona un proveedor válido.', false); return; }
+            if (!provId) { showToast('Select a valid supplier.', false); return; }
 
             const filas = Array.from(comprasTbody.querySelectorAll('tr'));
-            if (!filas.length) { showToast('Añade al menos una línea.', false); return; }
+            if (!filas.length) { showToast('Add at least one line.', false); return; }
 
             const items = [];
             for (const tr of filas) {
@@ -815,10 +815,10 @@
                 const z = tr.querySelector('[name="ubicacion_zona"]').value;
                 const r = tr.querySelector('[name="ubicacion_rack"]').value;
                 const a = tr.querySelector('[name="ubicacion_altura"]').value;
-                if (!prod) { showToast('Hay una línea sin producto.', false); return; }
-                if (cant<=0) { showToast('La cantidad debe ser mayor a 0.', false); return; }
+                if (!prod) { showToast('A line has no product.', false); return; }
+                if (cant<=0) { showToast('Quantity must be greater than 0.', false); return; }
                 const anyU = z||r||a;
-                if (anyU && (!z||!r||!a)) { showToast('Ubicación incompleta en una línea.', false); return; }
+                if (anyU && (!z||!r||!a)) { showToast('Incomplete location on a line.', false); return; }
                 items.push({ nombreProducto: prod, cantidad: cant, costoUnitario: precio, ubicacion: (z&&r&&a)?'P'+z+'/R'+r+'/'+a:null });
             }
 
@@ -831,47 +831,47 @@
             };
 
             fetch(API + 'compras', { method:'POST', headers:{'Content-Type':'application/json;charset=utf-8'}, body:JSON.stringify(payload) })
-                .then(r=>r.json().catch(()=>({status:'error',message:'Respuesta inesperada'})))
+                .then(r=>r.json().catch(()=>({status:'error',message:'Unexpected response'})))
                 .then(res => {
-                    showToast(res.message||'Compra registrada.', res.status==='success');
+                    showToast(res.message||'Purchase registered.', res.status==='success');
                     if (res.status==='success') { this.reset(); comprasTbody.innerHTML=''; crearRow(); provIdInput.value=''; catalogoProveedor=[]; }
                 })
-                .catch(() => showToast('Error de conexión.', false));
+                .catch(() => showToast('Connection error.', false));
         });
     }
 
     function renderDevoluciones() {
         contentArea.innerHTML = `
         <div class="view-enter">
-            <h1 class="section-title">Procesar Devoluciones</h1>
-            <p class="section-subtitle">Anula transacciones o registra devoluciones con actualización de stock.</p>
+            <h1 class="section-title">Process Returns</h1>
+            <p class="section-subtitle">Cancel transactions or register returns with stock update.</p>
 
             <div class="card" style="max-width:700px;margin:0 auto">
                 <form id="d-form">
-                    <div class="card-header"><h2>Anular Transacción</h2></div>
+                    <div class="card-header"><h2>Cancel Transaction</h2></div>
 
                     <div class="form-group">
-                        <label>Tipo de Transacción</label>
+                        <label>Transaction Type</label>
                         <select class="form-control" id="d-tipo" required>
-                            <option value="">-- Selecciona --</option>
-                            <option value="Venta">Venta</option>
-                            <option value="Compra">Compra</option>
+                            <option value="">-- Select --</option>
+                            <option value="Venta">Sale</option>
+                            <option value="Compra">Purchase</option>
                         </select>
                     </div>
 
                     <div class="form-group">
-                        <label>Código de la Transacción</label>
-                        <input class="form-control" id="d-codigo" type="text" placeholder="Ej: VENTA-101 o COMPRA-52" required>
+                        <label>Transaction Code</label>
+                        <input class="form-control" id="d-codigo" type="text" placeholder="e.g.: SALE-101 or PURCHASE-52" required>
                     </div>
 
                     <div class="form-group">
-                        <label>Producto (opcional)</label>
-                        <input class="form-control" id="d-producto" type="text" placeholder="PROD-22 o nombre del producto">
-                        <div style="font-size:11px;color:var(--text-muted);margin-top:4px">Si quieres actualizar la ubicación del producto devuelto, indicalo aquí junto con Zona/Rack/Altura.</div>
+                        <label>Product (optional)</label>
+                        <input class="form-control" id="d-producto" type="text" placeholder="PROD-22 or product name">
+                        <div style="font-size:11px;color:var(--text-muted);margin-top:4px">To update the returned product location, specify it here with Zone/Rack/Height.</div>
                     </div>
 
                     <div class="form-group">
-                        <label>Ubicación del Producto (opcional)</label>
+                        <label>Product Location (optional)</label>
                         <div class="ubicacion-grid">
                             ${crearSelectZona()}
                             ${crearSelectRack()}
@@ -880,11 +880,11 @@
                     </div>
 
                     <div class="form-group">
-                        <label>Motivo (opcional)</label>
-                        <textarea class="form-control" id="d-motivo" rows="3" placeholder="Ej: Producto incorrecto, cliente se arrepintió..."></textarea>
+                        <label>Reason (optional)</label>
+                        <textarea class="form-control" id="d-motivo" rows="3" placeholder="e.g.: Wrong product, customer changed mind..."></textarea>
                     </div>
 
-                    <button type="submit" class="btn btn-red btn-block">Procesar Devolución</button>
+                    <button type="submit" class="btn btn-red btn-block">Process Return</button>
                 </form>
             </div>
         </div>`;
@@ -893,12 +893,12 @@
             e.preventDefault();
             const tipo = document.getElementById('d-tipo').value;
             const codigo = document.getElementById('d-codigo').value.trim();
-            if (!tipo||!codigo) { showToast('Completa tipo y código.', false); return; }
+            if (!tipo||!codigo) { showToast('Fill in type and code.', false); return; }
 
             const zona = this.querySelector('[name="ubicacion_zona"]').value;
             const rack = this.querySelector('[name="ubicacion_rack"]').value;
             const altura = this.querySelector('[name="ubicacion_altura"]').value;
-            if ((zona||rack||altura) && (!zona||!rack||!altura)) { showToast('Completa Zona, Rack y Altura o déjalas vacías.', false); return; }
+            if ((zona||rack||altura) && (!zona||!rack||!altura)) { showToast('Fill in Zone, Rack and Height or leave them empty.', false); return; }
 
             const payload = {
                 tipo, codigo,
@@ -911,10 +911,10 @@
             btn.disabled = true;
             try {
                 const res = await fetch(API + 'devoluciones', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) });
-                const data = await res.json().catch(()=>({status:'error',message:'Respuesta inesperada'}));
-                showToast(data.message||'Procesado.', data.status==='success');
+                const data = await res.json().catch(()=>({status:'error',message:'Unexpected response'}));
+                showToast(data.message||'Processed.', data.status==='success');
                 if (data.status==='success') this.reset();
-            } catch { showToast('Error de conexión.', false); }
+            } catch { showToast('Connection error.', false); }
             finally { btn.disabled = false; }
         });
     }
@@ -922,19 +922,19 @@
     function renderHistorial() {
         contentArea.innerHTML = `
         <div class="view-enter">
-            <h1 class="section-title">Historial de Transacciones</h1>
-            <p class="section-subtitle">Registro unificado de ventas, compras y devoluciones.</p>
+            <h1 class="section-title">Transaction History</h1>
+            <p class="section-subtitle">Unified record of sales, purchases and returns.</p>
 
             <div class="card">
                 <div class="search-filter">
-                    <input type="text" id="h-search" placeholder="Buscar por tipo, código, cliente, proveedor...">
+                    <input type="text" id="h-search" placeholder="Search by type, code, customer, supplier...">
                 </div>
                 <div class="table-wrapper" style="max-height:65vh;overflow-y:auto">
                     <table class="data-table">
                         <thead><tr>
-                            <th>Tipo</th><th>Código</th><th>Fecha y Hora</th><th>Detalle</th><th>Ubicación</th><th class="right">Total (Bs.)</th><th class="center">Estado</th>
+                            <th>Type</th><th>Code</th><th>Date &amp; Time</th><th>Detail</th><th>Location</th><th class="right">Total (Bs.)</th><th class="center">Status</th>
                         </tr></thead>
-                        <tbody id="h-tbody"><tr><td colspan="7" class="center">Cargando...</td></tr></tbody>
+                        <tbody id="h-tbody"><tr><td colspan="7" class="center">Loading...</td></tr></tbody>
                     </table>
                 </div>
             </div>
@@ -945,7 +945,7 @@
         function renderTable(txs) {
             const tb = document.getElementById('h-tbody');
             if (!tb) return;
-            if (!txs.length) { tb.innerHTML = '<tr><td colspan="7" class="center" style="color:var(--text-muted)">No se encontraron transacciones.</td></tr>'; return; }
+            if (!txs.length) { tb.innerHTML = '<tr><td colspan="7" class="center" style="color:var(--text-muted)">No transactions found.</td></tr>'; return; }
             tb.innerHTML = txs.map(t => {
                 let badgeClass = 'badge-venta';
                 if (t.tipo==='Compra') badgeClass='badge-compra';
@@ -970,7 +970,7 @@
             renderTable(allTx);
         }).catch(() => {
             const tb = document.getElementById('h-tbody');
-            if (tb) tb.innerHTML = '<tr><td colspan="7" class="center" style="color:var(--color-red)">Error al cargar datos.</td></tr>';
+            if (tb) tb.innerHTML = '<tr><td colspan="7" class="center" style="color:var(--color-red)">Failed to load data.</td></tr>';
         });
 
         document.getElementById('h-search').addEventListener('input', function() {
@@ -982,69 +982,69 @@
     function renderFacturacion() {
         contentArea.innerHTML = `
         <div class="view-enter">
-            <h1 class="section-title">Módulo de Facturación</h1>
-            <p class="section-subtitle">Busca una venta para generar su factura con cálculo automático de impuestos.</p>
+            <h1 class="section-title">Billing Module</h1>
+            <p class="section-subtitle">Search a sale to generate its invoice with automatic tax calculation.</p>
 
             <div class="factura-layout">
                 <aside class="card">
-                    <div class="card-header"><h3>Buscar Venta</h3></div>
-                    <p style="font-size:12px;color:var(--text-muted);margin-bottom:12px">Ingresa el código exacto (ej. VENTA-123)</p>
+                    <div class="card-header"><h3>Search Sale</h3></div>
+                    <p style="font-size:12px;color:var(--text-muted);margin-bottom:12px">Enter the exact code (e.g. SALE-123)</p>
                     <form id="f-search-form">
                         <div class="form-group">
-                            <label>Código de Venta</label>
-                            <input class="form-control" id="f-codigo-search" type="text" placeholder="VENTA-..." required>
+                            <label>Sale Code</label>
+                            <input class="form-control" id="f-codigo-search" type="text" placeholder="SALE-..." required>
                         </div>
-                        <button type="submit" class="btn btn-primary btn-block">Buscar Venta</button>
+                        <button type="submit" class="btn btn-primary btn-block">Search Sale</button>
                     </form>
                     <div id="f-search-status" style="margin-top:10px;padding:10px;border-radius:8px;display:none"></div>
-                    <div style="margin-top:12px;font-size:11px;color:var(--text-muted)">Puedes agregar ítems adicionales (envío, descuentos) una vez cargada la venta.</div>
+                    <div style="margin-top:12px;font-size:11px;color:var(--text-muted)">You can add additional items (shipping, discounts) once the sale is loaded.</div>
                 </aside>
 
                 <section id="f-invoice-section" class="card" style="display:none">
                     <div style="display:flex;justify-content:space-between;align-items:flex-start;border-bottom:1px solid var(--border-color);padding-bottom:12px;margin-bottom:14px">
                         <div>
-                            <h2 style="margin:0;color:var(--color-accent);font-size:20px">FACTURA</h2>
-                            <p style="font-size:13px;color:var(--text-muted);margin:4px 0"><strong>Venta:</strong> <span id="f-vta-codigo"></span></p>
-                            <p style="font-size:13px;color:var(--text-muted);margin:4px 0"><strong>Fecha:</strong> <span id="f-vta-fecha"></span></p>
-                            <p style="font-size:13px;color:var(--text-muted);margin:4px 0"><strong>Cliente:</strong> <span id="f-vta-cliente"></span></p>
+                            <h2 style="margin:0;color:var(--color-accent);font-size:20px">INVOICE</h2>
+                            <p style="font-size:13px;color:var(--text-muted);margin:4px 0"><strong>Sale:</strong> <span id="f-vta-codigo"></span></p>
+                            <p style="font-size:13px;color:var(--text-muted);margin:4px 0"><strong>Date:</strong> <span id="f-vta-fecha"></span></p>
+                            <p style="font-size:13px;color:var(--text-muted);margin:4px 0"><strong>Customer:</strong> <span id="f-vta-cliente"></span></p>
                         </div>
                         <div style="font-size:28px;font-weight:700;color:var(--color-red)">M</div>
                     </div>
 
-                    <h3 style="font-size:14px;color:var(--text-muted);margin-bottom:8px">Productos Vendidos</h3>
+                    <h3 style="font-size:14px;color:var(--text-muted);margin-bottom:8px">Sold Products</h3>
                     <div class="table-wrapper">
                         <table class="data-table">
-                            <thead><tr><th>Producto</th><th>Ubicación</th><th class="right">Cant.</th><th class="right">Precio Unit.</th><th class="right">Subtotal</th></tr></thead>
+                            <thead><tr><th>Product</th><th>Location</th><th class="right">Qty.</th><th class="right">Unit Price</th><th class="right">Subtotal</th></tr></thead>
                             <tbody id="f-prod-tbody"></tbody>
                         </table>
                     </div>
 
-                    <h3 style="font-size:14px;color:var(--text-muted);margin:14px 0 8px">Ítems Adicionales</h3>
+                    <h3 style="font-size:14px;color:var(--text-muted);margin:14px 0 8px">Additional Items</h3>
                     <div class="table-wrapper">
                         <table class="data-table">
-                            <thead><tr><th>Descripción</th><th class="right">Cantidad</th><th class="right">Monto Unit.</th><th class="right">Tipo</th><th class="center">Acción</th></tr></thead>
+                            <thead><tr><th>Description</th><th class="right">Quantity</th><th class="right">Unit Amount</th><th class="right">Type</th><th class="center">Action</th></tr></thead>
                             <tbody id="f-items-tbody"></tbody>
                         </table>
                     </div>
-                    <button type="button" id="f-add-item" class="btn btn-outline btn-sm" style="margin-top:8px">+ Añadir Ítem</button>
+                    <button type="button" id="f-add-item" class="btn btn-outline btn-sm" style="margin-top:8px">+ Add Item</button>
 
                     <div class="factura-totals">
-                        <div class="row"><div>Subtotal Productos:</div><div id="f-sub-prod">0.00</div></div>
-                        <div class="row"><div>Total Adicionales:</div><div id="f-sub-adic">0.00</div></div>
+                        <div class="row"><div>Products Subtotal:</div><div id="f-sub-prod">0.00</div></div>
+                        <div class="row"><div>Additional Total:</div><div id="f-sub-adic">0.00</div></div>
                         <div style="display:flex;gap:12px;justify-content:flex-end;align-items:center;flex-wrap:wrap;margin:6px 0">
-                            <label style="margin:0;font-size:12px;font-weight:600;color:var(--text-secondary)">Descuento Global (Bs.)</label>
+                            <label style="margin:0;font-size:12px;font-weight:600;color:var(--text-secondary)">Global Discount (Bs.)</label>
                             <input class="form-control" id="f-descuento" type="number" value="0.00" step="0.01" style="width:120px;text-align:right">
-                            <label style="margin:0;font-size:12px;font-weight:600;color:var(--text-secondary)">Tasa Impuesto (%)</label>
+                            <label style="margin:0;font-size:12px;font-weight:600;color:var(--text-secondary)">Tax Rate (%)</label>
                             <input class="form-control" id="f-tasa" type="number" value="13.00" step="0.01" style="width:120px;text-align:right">
                         </div>
-                        <div class="row"><div>Impuestos:</div><div id="f-impuestos">0.00</div></div>
-                        <div class="row grand"><div>TOTAL A PAGAR (Bs.)</div><div id="f-total-final">0.00</div></div>
+                        <div class="row"><div>Taxes:</div><div id="f-impuestos">0.00</div></div>
+                        <div class="row grand"><div>TOTAL TO PAY (Bs.)</div><div id="f-total-final">0.00</div></div>
                     </div>
 
                     <div class="factura-actions">
-                        <button id="f-generate-btn" class="btn btn-primary">Guardar Factura</button>
-                        <button id="f-print-conf-btn" class="btn btn-outline">Imprimir Conformidad</button>
-                        <button id="f-print-inv-btn" class="btn btn-outline">Imprimir Factura</button>
+                        <button id="f-generate-btn" class="btn btn-primary">Save Invoice</button>
+                        <button id="f-print-conf-btn" class="btn btn-outline">Print Conformity</button>
+                        <button id="f-print-inv-btn" class="btn btn-outline">Print Invoice</button>
                     </div>
                     <div id="f-final-status" style="margin-top:12px;padding:10px;border-radius:8px;display:none"></div>
                 </section>
@@ -1073,7 +1073,7 @@
                     statusEl.style.display='block';
                     statusEl.style.background='rgba(192,57,43,0.1)';
                     statusEl.style.color='var(--color-red)';
-                    statusEl.textContent = err.message || 'Venta no encontrada';
+                    statusEl.textContent = err.message || 'Sale not found';
                     invoiceSection.style.display = 'none';
                 });
         });
@@ -1097,10 +1097,10 @@
         // Add item
         document.getElementById('f-add-item').addEventListener('click', () => {
             const tr = document.createElement('tr');
-            tr.innerHTML = `<td><input class="form-control fi-desc" type="text" placeholder="Ej: Costo de envío"></td>
+            tr.innerHTML = `<td><input class="form-control fi-desc" type="text" placeholder="e.g.: Shipping cost"></td>
                 <td class="right"><input class="form-control fi-cant" type="number" value="1" min="1" style="width:70px"></td>
                 <td class="right"><input class="form-control fi-monto" type="number" value="0.00" step="0.01" style="width:100px"></td>
-                <td class="right"><select class="form-control fi-tipo" style="width:120px"><option value="ADICION">Suma (+)</option><option value="DEDUCCION">Resta (-)</option></select></td>
+                <td class="right"><select class="form-control fi-tipo" style="width:120px"><option value="ADICION">Add (+)</option><option value="DEDUCCION">Subtract (-)</option></select></td>
                 <td class="center"><button class="btn btn-red btn-sm fi-remove">✕</button></td>`;
             tr.querySelector('.fi-remove').addEventListener('click', () => { tr.remove(); recalcTotals(); });
             addItemsTbody.appendChild(tr);
@@ -1139,7 +1139,7 @@
 
         // Generate invoice
         document.getElementById('f-generate-btn').addEventListener('click', () => {
-            if (!currentVenta) { showToast('Primero carga una venta.', false); return; }
+            if (!currentVenta) { showToast('Load a sale first.', false); return; }
             const items = [];
             addItemsTbody.querySelectorAll('tr').forEach(row => {
                 items.push({
@@ -1159,10 +1159,10 @@
                 .then(r=>r.json().then(b=>({status:r.status,body:b})))
                 .then(({status,body}) => {
                     const ok = status===200;
-                    showToast(body.message||(ok?'Factura guardada.':'Error'), ok);
+                    showToast(body.message||(ok?'Invoice saved.':'Error'), ok);
                     if (ok) document.getElementById('f-generate-btn').disabled=true;
                 })
-                .catch(() => showToast('Error de conexión.', false));
+                .catch(() => showToast('Connection error.', false));
         });
 
         // Print conformity
@@ -1170,7 +1170,7 @@
             if (!currentVenta) return;
             let rows = (currentVenta.productos||[]).map(p => `<tr><td style="text-align:center">${p.cantidad||0}</td><td>${esc(p.nombre||'')}</td><td>${esc(p.ubicacion||'')}</td><td>..................</td></tr>`).join('');
             const w = window.open('','_blank');
-            w.document.write(`<html><head><title>Conformidad</title><style>body{font-family:Arial;margin:30px}table{width:100%;border-collapse:collapse}th,td{border:1px solid #ccc;padding:8px}</style></head><body><h1>Hoja de Conformidad</h1><p><strong>Cliente:</strong> ${esc(currentVenta.clienteNombre||'')}</p><p><strong>Referencia:</strong> ${esc(currentVenta.codigoVenta||'')}</p><table><thead><tr><th>Cantidad</th><th>Producto</th><th>Ubicación</th><th>Revisado (OK)</th></tr></thead><tbody>${rows}</tbody></table><div style="margin-top:40px">Firma: ____________________</div></body></html>`);
+            w.document.write(`<html><head><title>Conformity</title><style>body{font-family:Arial;margin:30px}table{width:100%;border-collapse:collapse}th,td{border:1px solid #ccc;padding:8px}</style></head><body><h1>Conformity Sheet</h1><p><strong>Customer:</strong> ${esc(currentVenta.clienteNombre||'')}</p><p><strong>Reference:</strong> ${esc(currentVenta.codigoVenta||'')}</p><table><thead><tr><th>Quantity</th><th>Product</th><th>Location</th><th>Checked (OK)</th></tr></thead><tbody>${rows}</tbody></table><div style="margin-top:40px">Signature: ____________________</div></body></html>`);
             w.document.close(); w.print();
         });
 
@@ -1183,7 +1183,7 @@
             const imp = document.getElementById('f-impuestos').textContent;
             const total = document.getElementById('f-total-final').textContent;
             const w = window.open('','_blank');
-            w.document.write(`<html><head><title>Factura ${esc(currentVenta.codigoVenta||'')}</title><style>body{font-family:Arial;margin:20px;color:#222}.header{display:flex;justify-content:space-between;align-items:center}h1{margin:0}table{width:100%;border-collapse:collapse;margin-top:12px}th,td{border:1px solid #ddd;padding:8px;text-align:left}th{background:#f3f6f8;color:#003366}td.right{text-align:right}.totals{margin-top:12px;width:50%;float:right}.totals .row{display:flex;justify-content:space-between;padding:6px 0}</style></head><body><div class="header"><div><h1>FACTURA</h1><p><strong>Cliente:</strong> ${esc(currentVenta.clienteNombre||'')}</p><p><strong>Venta:</strong> ${esc(currentVenta.codigoVenta||'')}</p><p><strong>Fecha:</strong> ${formatDate(currentVenta.fechaVenta)}</p></div><div style="font-size:40px;font-weight:700;color:#c0392b">M</div></div><h3>Productos</h3><table><thead><tr><th>Producto</th><th style="text-align:center">Ubicación</th><th style="text-align:center">Cant.</th><th style="text-align:right">Precio U.</th><th style="text-align:right">Subtotal</th></tr></thead><tbody>${rows}</tbody></table><div class="totals"><div class="row"><div>Subtotal:</div><div>${sub}</div></div><div class="row"><div>Adicionales:</div><div>${adic}</div></div><div class="row"><div>Impuestos:</div><div>${imp}</div></div><div class="row" style="font-weight:700"><div>TOTAL:</div><div>${total}</div></div></div><div style="clear:both;margin-top:60px"><strong>Observaciones:</strong> __________________________</div></body></html>`);
+            w.document.write(`<html><head><title>Invoice ${esc(currentVenta.codigoVenta||'')}</title><style>body{font-family:Arial;margin:20px;color:#222}.header{display:flex;justify-content:space-between;align-items:center}h1{margin:0}table{width:100%;border-collapse:collapse;margin-top:12px}th,td{border:1px solid #ddd;padding:8px;text-align:left}th{background:#f3f6f8;color:#003366}td.right{text-align:right}.totals{margin-top:12px;width:50%;float:right}.totals .row{display:flex;justify-content:space-between;padding:6px 0}</style></head><body><div class="header"><div><h1>INVOICE</h1><p><strong>Customer:</strong> ${esc(currentVenta.clienteNombre||'')}</p><p><strong>Sale:</strong> ${esc(currentVenta.codigoVenta||'')}</p><p><strong>Date:</strong> ${formatDate(currentVenta.fechaVenta)}</p></div><div style="font-size:40px;font-weight:700;color:#c0392b">M</div></div><h3>Products</h3><table><thead><tr><th>Product</th><th style="text-align:center">Location</th><th style="text-align:center">Qty.</th><th style="text-align:right">Unit Price</th><th style="text-align:right">Subtotal</th></tr></thead><tbody>${rows}</tbody></table><div class="totals"><div class="row"><div>Subtotal:</div><div>${sub}</div></div><div class="row"><div>Additional:</div><div>${adic}</div></div><div class="row"><div>Taxes:</div><div>${imp}</div></div><div class="row" style="font-weight:700"><div>TOTAL:</div><div>${total}</div></div></div><div style="clear:both;margin-top:60px"><strong>Notes:</strong> __________________________</div></body></html>`);
             w.document.close(); w.print();
         });
     }

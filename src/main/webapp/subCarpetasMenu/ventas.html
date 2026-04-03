@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Registro de Ventas - MOTOLAND</title>
+    <title>Sales Register - MOTOLAND</title>
     <link rel="stylesheet" href="../style.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
@@ -71,43 +71,43 @@
 <body>
 <div class="container">
     <header>
-        <h1>Registro de Ventas</h1>
-        <button class="btn-back" onclick="location.href='../menu.html'">Volver al Menú</button>
+        <h1>Sales Register</h1>
+        <button class="btn-back" onclick="location.href='../menu.html'">Back to Menu</button>
     </header>
 
     <section class="card">
-        <h2 style="text-align:center;color:var(--primary)">Añadir Producto a la Venta</h2>
+        <h2 style="text-align:center;color:var(--primary)">Add Product to Sale</h2>
 
         <div style="margin-bottom:12px">
-            <label>Buscar Producto (con stock disponible):</label>
+            <label>Search Product (with available stock):</label>
             <div class="suggestions">
-                <input id="producto-search" type="text" placeholder="Escribe para buscar (ej: Casco, Llanta)..." autocomplete="off">
+                <input id="producto-search" type="text" placeholder="Type to search (e.g.: Helmet, Tire)..." autocomplete="off">
                 <div id="product-results" class="listbox" style="display:none"></div>
             </div>
         </div>
 
         <div class="row" style="margin-top:8px">
             <div>
-                <label for="cantidad">Cantidad:</label>
+                <label for="cantidad">Quantity:</label>
                 <input id="cantidad" type="number" min="1" value="1">
             </div>
             <div>
-                <label for="cliente-select">Cliente</label>
-                <select id="cliente-select"><option value="">Cliente general</option></select>
+                <label for="cliente-select">Customer</label>
+                <select id="cliente-select"><option value="">General customer</option></select>
             </div>
         </div>
 
         <div style="margin-top:12px">
-            <button id="add-to-sale" class="big-btn" style="width:100%">Añadir a la Venta</button>
+            <button id="add-to-sale" class="big-btn" style="width:100%">Add to Sale</button>
         </div>
     </section>
 
     <section class="card">
-        <h2 style="text-align:center;color:var(--primary)">Detalle de Venta Actual</h2>
+        <h2 style="text-align:center;color:var(--primary)">Current Sale Detail</h2>
 
         <table class="table" id="venta-actual-table">
             <thead>
-            <tr><th>Producto</th><th>Cantidad</th><th>Precio Unit. (Bs.)</th><th>Stock</th><th>Subtotal</th><th>Acción</th></tr>
+            <tr><th>Product</th><th>Quantity</th><th>Unit Price (Bs.)</th><th>Stock</th><th>Subtotal</th><th>Action</th></tr>
             </thead>
             <tbody id="venta-actual-tbody"></tbody>
         </table>
@@ -115,7 +115,7 @@
         <div class="total">TOTAL: Bs. <span id="total-venta">0.00</span></div>
 
         <div style="margin-top:12px">
-            <button id="registrar-venta-btn" class="big-btn" style="width:100%">Registrar Venta</button>
+            <button id="registrar-venta-btn" class="big-btn" style="width:100%">Register Sale</button>
         </div>
     </section>
 </div>
@@ -170,12 +170,12 @@
                 .then(r => r.ok ? r.json() : r.json().then(j => { throw j; }))
                 .then(data => {
                     clienteList = Array.isArray(data) ? data : [];
-                    clienteSelect.innerHTML = '<option value="">Cliente general</option>';
+                    clienteSelect.innerHTML = '<option value="">General customer</option>';
                     clienteList.forEach((c, i) => {
                         const val = (c.id != null) ? c.id : (c.nombre + '|' + i);
                         const opt = document.createElement('option');
                         opt.value = val;
-                        opt.textContent = c.nombre || 'Cliente';
+                        opt.textContent = c.nombre || 'Customer';
                         clienteSelect.appendChild(opt);
                     });
                 })
@@ -211,9 +211,9 @@
 
         // add carrito
         addBtn.addEventListener('click', () => {
-            if (!selectedProduct) { showStatus('Selecciona un producto de la lista desplegable.', false); inputSearch.focus(); return; }
+            if (!selectedProduct) { showStatus('Select a product from the dropdown list.', false); inputSearch.focus(); return; }
             const cantidad = parseInt(cantidadInput.value) || 0;
-            if (cantidad <= 0) { showStatus('Ingresa una cantidad válida (mayor a 0).', false); cantidadInput.focus(); return; }
+            if (cantidad <= 0) { showStatus('Enter a valid quantity (greater than 0).', false); cantidadInput.focus(); return; }
 
             const item = {
                 productoId: selectedProduct.id,
@@ -285,12 +285,12 @@
                 const btnEdit = document.createElement('button');
                 btnEdit.className = 'edit-btn';
                 btnEdit.type = 'button';
-                btnEdit.textContent = 'Editar';
+                btnEdit.textContent = 'Edit';
                 btnEdit.addEventListener('click', () => startEditProduct(idx, it, tr, inpPrecio));
                 const btnRemove = document.createElement('button');
                 btnRemove.className = 'small-btn';
                 btnRemove.type = 'button';
-                btnRemove.textContent = 'Quitar';
+                btnRemove.textContent = 'Remove';
                 btnRemove.addEventListener('click', () => {
                     carrito = carrito.filter((_, i) => i !== idx);
                     renderCarrito();
@@ -319,7 +319,7 @@
 
             if (item.stock != null && item.stock !== '' && item.cantidad > item.stock) {
                 tr.querySelectorAll('input').forEach(inp => inp.classList.add('invalid'));
-                const warn = document.createElement('div'); warn.className = 'warn stock-warning'; warn.textContent = '¡Cantidad mayor al stock!';
+                const warn = document.createElement('div'); warn.className = 'warn stock-warning'; warn.textContent = 'Quantity exceeds stock!';
                 tr.cells[4].appendChild(warn);
             } else {
                 tr.querySelectorAll('input').forEach(inp => inp.classList.remove('invalid'));
@@ -377,12 +377,12 @@
 
         // registrar venta -> POST
         registrarBtn.addEventListener('click', async () => {
-            if (carrito.length === 0) { showStatus('No hay productos en la venta.', false); return; }
+            if (carrito.length === 0) { showStatus('No products in the sale.', false); return; }
 
             for (const it of carrito) {
-                if (!it.productoId || it.cantidad <= 0) { showStatus('Hay una línea con datos inválidos.', false); return; }
+                if (!it.productoId || it.cantidad <= 0) { showStatus('A line has invalid data.', false); return; }
                 if (it.stock != null && it.cantidad > it.stock) {
-                    if (!confirm('Hay artículos con cantidad mayor al stock. Continuar de todas formas?')) return;
+                    if (!confirm('Some items have quantity exceeding stock. Continue anyway?')) return;
                 }
             }
 
@@ -403,12 +403,12 @@
                 });
                 const body = await res.json().catch(() => ({}));
                 if (!res.ok) {
-                    showStatus(body.message || 'Error al registrar venta.', false);
+                    showStatus(body.message || 'Error registering sale.', false);
                     console.error('Error registrar venta', body);
                     return;
                 }
-                // éxito: mostramos la notificación verde (en vez de alert de browser)
-                showStatus(body.message || 'Venta registrada con éxito.', true);
+                // success: show green notification
+                showStatus(body.message || 'Sale registered successfully.', true);
 
                 // limpiar y recargar datos
                 carrito = [];
@@ -416,7 +416,7 @@
                 getData();
             } catch(err) {
                 console.error('Error enviando venta', err);
-                showStatus('Error de conexión al registrar venta.', false);
+                showStatus('Connection error registering sale.', false);
             }
         });
 

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Devoluciones - MOTOLAND</title>
+    <title>Returns - MOTOLAND</title>
     <link rel="stylesheet" href="../style.css" />
     <style>
         .devolucion-container { max-width: 700px; margin: 0 auto; background:#f9f9f9; padding:30px; border-radius:8px; box-shadow:0 4px 8px rgba(0,0,0,0.1); }
@@ -20,39 +20,39 @@
 <body>
 <div class="container">
     <header class="menu-header">
-        <h1>Procesar Devoluciones</h1>
-        <button onclick="window.location.href='../menu.html'">Volver al Menú</button>
+        <h1>Process Returns</h1>
+        <button onclick="window.location.href='../menu.html'">Back to Menu</button>
     </header>
 
     <div class="devolucion-container">
         <form id="devolucion-form">
-            <h2>Anular Transacción o Registrar Devolución</h2>
+            <h2>Cancel Transaction or Register Return</h2>
 
             <div class="form-group">
-                <label for="tipo-devolucion">Tipo de Transacción a Anular:</label>
+                <label for="tipo-devolucion">Transaction Type to Cancel:</label>
                 <select id="tipo-devolucion" required>
-                    <option value="">-- Selecciona un tipo --</option>
-                    <option value="Venta">Venta</option>
-                    <option value="Compra">Compra</option>
+                    <option value="">-- Select a type --</option>
+                    <option value="Venta">Sale</option>
+                    <option value="Compra">Purchase</option>
                 </select>
             </div>
 
             <div class="form-group">
-                <label for="codigo-transaccion">Código de la Transacción:</label>
-                <input type="text" id="codigo-transaccion" placeholder="Ej: VENTA-101 o COMPRA-52" required />
+                <label for="codigo-transaccion">Transaction Code:</label>
+                <input type="text" id="codigo-transaccion" placeholder="e.g.: SALE-101 or PURCHASE-52" required />
             </div>
 
             <div class="form-group">
-                <label for="producto">Producto (opcional):</label>
-                <input id="producto" type="text" placeholder="Ej: PROD-22 o nombre del producto (opcional)" />
-                <small style="color:#666;display:block;margin-top:6px;">Si quieres actualizar la ubicación del producto devuelto, indica el producto y selecciona Zona/Rack/Altura (los 3).</small>
+                <label for="producto">Product (optional):</label>
+                <input id="producto" type="text" placeholder="e.g.: PROD-22 or product name (optional)" />
+                <small style="color:#666;display:block;margin-top:6px;">To update the returned product location, specify the product and select Zone/Rack/Height (all 3).</small>
             </div>
 
             <div class="form-group">
-                <label>Ubicación del Producto (opcional):</label>
+                <label>Product Location (optional):</label>
                 <div class="ubicacion-grid">
                     <select id="ubic-zona">
-                        <option value="">Zona</option>
+                        <option value="">Zone</option>
                         <option value="1">P1</option>
                         <option value="2">P2</option>
                         <option value="3">P3</option>
@@ -66,7 +66,7 @@
                     </select>
 
                     <select id="ubic-altura">
-                        <option value="">Altura</option>
+                        <option value="">Height</option>
                         <option value="A">A</option>
                         <option value="B">B</option>
                         <option value="C">C</option>
@@ -77,11 +77,11 @@
             </div>
 
             <div class="form-group">
-                <label for="motivo-devolucion">Motivo de la Devolución (Opcional):</label>
-                <textarea id="motivo-devolucion" rows="3" placeholder="Ej: Producto incorrecto, cliente se arrepintió, etc."></textarea>
+                <label for="motivo-devolucion">Return Reason (Optional):</label>
+                <textarea id="motivo-devolucion" rows="3" placeholder="e.g.: Wrong product, customer changed mind, etc."></textarea>
             </div>
 
-            <button type="submit">Procesar Devolución</button>
+            <button type="submit">Process Return</button>
         </form>
 
         <div id="status-message" class="status-message"></div>
@@ -116,14 +116,14 @@
             const altura = document.getElementById('ubic-altura').value;
 
             if (!tipo || !codigo) {
-                alert('Completa tipo y código de la transacción.');
+                alert('Fill in type and transaction code.');
                 return;
             }
 
-            // si mandan ubicacion, que venga completa
+            // if location specified, require all 3
             const anyUbic = zona || rack || altura;
             if (anyUbic && (!zona || !rack || !altura)) {
-                alert('Si vas a especificar una ubicación, completa Zona, Rack y Altura.');
+                alert('If specifying a location, fill in Zone, Rack and Height.');
                 return;
             }
 
@@ -147,7 +147,7 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
-                const data = await res.json().catch(() => ({ status: 'error', message: 'Respuesta inesperada del servidor' }));
+                const data = await res.json().catch(() => ({ status: 'error', message: 'Unexpected server response' }));
 
                 statusMessage.textContent = data.message || (data.status === 'success' ? 'Procesado' : 'Error');
                 statusMessage.className = 'status-message ' + (data.status === 'success' ? 'success' : 'error');
