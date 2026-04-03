@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Registro de Compras - MOTOLAND</title>
+    <title>Purchase Register - MOTOLAND</title>
     <link rel="stylesheet" href="../style.css" />
     <style>
         /* estilos autocomplete */
@@ -30,64 +30,64 @@
 <body>
 <div class="container">
     <header class="menu-header">
-        <h1>Registrar Compra</h1>
-        <button onclick="window.location.href='../menu.html'">Volver al Menú</button>
+        <h1>Register Purchase</h1>
+        <button onclick="window.location.href='../menu.html'">Back to Menu</button>
     </header>
 
     <form id="compra-form" novalidate>
         <div class="form-section">
-            <h2>1. Datos de la Compra</h2>
+            <h2>1. Purchase Details</h2>
             <div class="form-group">
-                <label for="codigo-compra">Código de Compra (opcional):</label>
-                <input id="codigo-compra" name="codigo_compra" type="text" placeholder="Ej: COMPRA-123">
+                <label for="codigo-compra">Purchase Code (optional):</label>
+                <input id="codigo-compra" name="codigo_compra" type="text" placeholder="e.g.: PURCHASE-123">
             </div>
 
             <!-- provider autocomplete -->
             <div class="form-group relative" style="margin-top:10px;">
-                <label for="proveedor-input">Proveedor:</label>
-                <input id="proveedor-input" name="proveedor_display" type="text" placeholder="Escribe para buscar proveedor..." autocomplete="off">
+                <label for="proveedor-input">Supplier:</label>
+                <input id="proveedor-input" name="proveedor_display" type="text" placeholder="Type to search supplier..." autocomplete="off">
                 <input id="proveedor-id" name="proveedorId" type="hidden" value="">
                 <div id="proveedor-suggestions" class="autocomplete-list" style="display:none"></div>
             </div>
 
             <div class="form-group" style="display:flex; gap:10px;">
                 <div style="flex:1">
-                    <label for="fecha-compra">Fecha:</label>
+                    <label for="fecha-compra">Date:</label>
                     <input id="fecha-compra" name="fecha_compra" type="datetime-local">
                 </div>
                 <div style="width:220px">
-                    <label for="estado-compra">Estado:</label>
+                    <label for="estado-compra">Status:</label>
                     <select id="estado-compra" name="estado">
-                        <option value="Completada">Completada</option>
-                        <option value="Pendiente">Pendiente</option>
-                        <option value="Anulada">Anulada</option>
+                        <option value="Completada">Completed</option>
+                        <option value="Pendiente">Pending</option>
+                        <option value="Anulada">Cancelled</option>
                     </select>
                 </div>
             </div>
         </div>
 
         <div class="form-section">
-            <h2>2. Detalle de Productos</h2>
+            <h2>2. Product Details</h2>
             <table id="detalles-compras-table">
                 <thead>
                 <tr>
-                    <th>Producto (Código o Nombre)</th>
-                    <th>Cantidad</th>
-                    <th>Precio Unitario (Bs.)</th>
-                    <th>Ubicación (Zona / Rack / Altura)</th>
-                    <th>Vista Ubicación</th>
-                    <th>Acción</th>
+                    <th>Product (Code or Name)</th>
+                    <th>Quantity</th>
+                    <th>Unit Price (Bs.)</th>
+                    <th>Location (Zone / Rack / Height)</th>
+                    <th>Location Preview</th>
+                    <th>Action</th>
                 </tr>
                 </thead>
                 <tbody id="detalles-compras-tbody"></tbody>
             </table>
             <div style="margin-top:10px;">
-                <button type="button" id="add-detail-btn">+ Añadir Línea</button>
+                <button type="button" id="add-detail-btn">+ Add Line</button>
             </div>
         </div>
 
         <div class="form-section" style="text-align:center;">
-            <button id="submit-compra-btn" type="submit">Registrar Compra</button>
+                <button id="submit-compra-btn" type="submit">Register Purchase</button>
             <div id="status-message" class="status-message"></div>
         </div>
     </form>
@@ -169,7 +169,7 @@
         // helpers ubicacion
         function crearSelectZona() {
             const s = document.createElement('select'); s.name = 'ubicacion_zona';
-            const ph = document.createElement('option'); ph.value=''; ph.textContent='Zona'; s.appendChild(ph);
+            const ph = document.createElement('option'); ph.value=''; ph.textContent='Zone'; s.appendChild(ph);
             for (let i=1;i<=4;i++){ const o=document.createElement('option'); o.value=String(i); o.textContent='P'+i; s.appendChild(o); }
             return s;
         }
@@ -181,7 +181,7 @@
         }
         function crearSelectAltura() {
             const s = document.createElement('select'); s.name = 'ubicacion_altura';
-            const ph = document.createElement('option'); ph.value=''; ph.textContent='Altura'; s.appendChild(ph);
+            const ph = document.createElement('option'); ph.value=''; ph.textContent='Height'; s.appendChild(ph);
             ['A','B','C','D','E'].forEach(l => { const o=document.createElement('option'); o.value=l; o.textContent=l; s.appendChild(o); });
             return s;
         }
@@ -234,7 +234,7 @@
             function updatePreview() {
                 const z = selZ.value, r = selR.value, a = selA.value;
                 if (!z && !r && !a) prevDiv.textContent = '';
-                else if (!z || !r || !a) prevDiv.textContent = 'Incompleta';
+                else if (!z || !r || !a) prevDiv.textContent = 'Incomplete';
                 else prevDiv.textContent = `P${z}/R${r}/${a}`;
             }
             selZ.addEventListener('change', updatePreview);
@@ -365,22 +365,22 @@
             // validar proveedorId
             const proveedorId = proveedorIdInput.value ? parseInt(proveedorIdInput.value, 10) : null;
             if (!proveedorId) {
-                alert('Selecciona un proveedor válido desde la lista (escribe y selecciona).');
+                alert('Select a valid supplier from the list (type and select).');
                 return;
             }
 
-            // validar filas
+            // validate rows
             const filas = Array.from(detallesTbody.querySelectorAll('tr'));
-            if (filas.length === 0) { alert('Añade al menos una línea de detalle.'); return; }
+            if (filas.length === 0) { alert('Add at least one detail line.'); return; }
 
             for (const tr of filas) {
                 const producto = (tr.querySelector('input[name="producto"]').value || '').trim();
                 const cantidad = parseInt(tr.querySelector('input[name="cantidad"]').value,10) || 0;
                 const precio_unitario = parseFloat(tr.querySelector('input[name="precio_unitario"]').value) || 0;
-                if (!producto) { alert('Hay una línea sin producto.'); return; }
-                if (cantidad <= 0) { alert('La cantidad debe ser mayor a 0 en todas las líneas.'); return; }
-                if (precio_unitario < 0) { alert('Precio unitario inválido.'); return; }
-                if (!validarUbicacionFila(tr)) { alert('Hay una ubicación incompleta en una línea. Llena Zona,Rack y Altura o déjalas todas vacías.'); return; }
+                if (!producto) { alert('A line has no product.'); return; }
+                if (cantidad <= 0) { alert('Quantity must be greater than 0 on all lines.'); return; }
+                if (precio_unitario < 0) { alert('Invalid unit price.'); return; }
+                if (!validarUbicacionFila(tr)) { alert('Incomplete location on a line. Fill in Zone, Rack and Height or leave them all empty.'); return; }
             }
 
             // construir payload (ComprasServlet espera proveedorId y detalles en items)
@@ -397,10 +397,10 @@
                 headers: { 'Content-Type': 'application/json; charset=utf-8' },
                 body: JSON.stringify(payload)
             })
-                .then(r => r.json().catch(()=>({ status:'error', message:'Respuesta no JSON' })))
+                .then(r => r.json().catch(()=>({ status:'error', message:'Non-JSON response' })))
                 .then(res => {
                     if (res.status === 'success' || res.status === 200) {
-                        statusMessage.textContent = res.message || 'Compra registrada correctamente.';
+                        statusMessage.textContent = res.message || 'Purchase registered successfully.';
                         statusMessage.className = 'status-message success';
                         statusMessage.style.display = 'block';
                         compraForm.reset();
@@ -409,7 +409,7 @@
                         proveedorIdInput.value = '';
                         catalogoProveedor = [];
                     } else {
-                        statusMessage.textContent = res.message || 'Error al registrar la compra.';
+                        statusMessage.textContent = res.message || 'Error registering purchase.';
                         statusMessage.className = 'status-message error';
                         statusMessage.style.display = 'block';
                     }
@@ -417,7 +417,7 @@
                 })
                 .catch(err => {
                     console.error(err);
-                    statusMessage.textContent = 'Error de conexión al enviar la compra.';
+                    statusMessage.textContent = 'Connection error sending purchase.';
                     statusMessage.className = 'status-message error';
                     statusMessage.style.display = 'block';
                     setTimeout(()=> statusMessage.style.display = 'none', 5000);

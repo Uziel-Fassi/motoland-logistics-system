@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Facturación - MOTOLAND</title>
+    <title>Billing - MOTOLAND</title>
     <link rel="icon" href="https://i.ibb.co/L5MvV2M/logo.png">
     <style>
         /* fuente */
@@ -135,90 +135,90 @@
 <body>
 <div class="page">
     <div class="header-row">
-        <h1>Módulo de Facturación</h1>
-        <button class="volver-menu" onclick="window.location.href='../menu.html'">Volver al Menú</button>
+        <h1>Billing Module</h1>
+        <button class="volver-menu" onclick="window.location.href='../menu.html'">Back to Menu</button>
     </div>
 
     <div class="layout">
         <aside class="card search-card">
-            <h2>Buscar Venta para Facturar</h2>
-            <p class="hint">Ingresa el código exacto (ej. <em>VENTA-123</em>)</p>
+            <h2>Search Sale to Invoice</h2>
+            <p class="hint">Enter the exact code (e.g. <em>SALE-123</em>)</p>
             <form id="search-form">
                 <div>
-                    <label for="codigo-venta-search">Código de Venta</label>
-                    <input id="codigo-venta-search" type="text" placeholder="VENTA-..." required>
+                    <label for="codigo-venta-search">Sale Code</label>
+                    <input id="codigo-venta-search" type="text" placeholder="SALE-..." required>
                 </div>
                 <div style="margin-top:10px">
-                    <button class="btn-primary" type="submit">Buscar Venta</button>
+                    <button class="btn-primary" type="submit">Search Sale</button>
                 </div>
             </form>
             <div id="search-status" class="status" aria-live="polite"></div>
 
-            <div style="margin-top:14px; font-size:13px; color:var(--muted)">Puedes agregar ítems adicionales (envío, descuentos manuales) una vez cargada la venta.</div>
+            <div style="margin-top:14px; font-size:13px; color:var(--muted)">You can add additional items (shipping, manual discounts) once the sale is loaded.</div>
         </aside>
 
         <section id="invoice-section" class="card invoice-card" style="display:none">
             <div id="invoice-preview">
                 <div class="invoice-header">
                     <div>
-                        <h2>FACTURA</h2>
+                        <h2>INVOICE</h2>
                         <div class="invoice-details">
-                            <p><strong>Venta Original:</strong> <span id="venta-codigo"></span></p>
-                            <p><strong>Fecha Venta:</strong> <span id="venta-fecha"></span></p>
-                            <p><strong>Cliente:</strong> <span id="venta-cliente"></span></p>
+                            <p><strong>Original Sale:</strong> <span id="venta-codigo"></span></p>
+                            <p><strong>Sale Date:</strong> <span id="venta-fecha"></span></p>
+                            <p><strong>Customer:</strong> <span id="venta-cliente"></span></p>
                         </div>
                     </div>
                     <div style="text-align:right"><img src="https://i.ibb.co/L5MvV2M/logo.png" alt="Logo" style="height:68px"></div>
                 </div>
 
-                <h3 style="margin:6px 0 8px; color:var(--muted)">Productos Vendidos</h3>
+                <h3 style="margin:6px 0 8px; color:var(--muted)">Sold Products</h3>
                 <table id="productos-table">
                     <thead>
                     <tr>
-                        <th>Producto</th>
-                        <th>Ubicación</th>
-                        <th class="right">Cantidad</th>
-                        <th class="right">Precio Unit.</th>
+                        <th>Product</th>
+                        <th>Location</th>
+                        <th class="right">Qty.</th>
+                        <th class="right">Unit Price</th>
                         <th class="right">Subtotal</th>
                     </tr>
                     </thead>
                     <tbody id="productos-tbody"></tbody>
                 </table>
 
-                <h3 style="margin:12px 0 8px; color:var(--muted)">Ítems Adicionales y Deducciones</h3>
+                <h3 style="margin:12px 0 8px; color:var(--muted)">Additional Items &amp; Deductions</h3>
                 <table id="additional-items-table">
                     <thead>
                     <tr>
-                        <th>Descripción</th>
-                        <th class="right">Cantidad</th>
-                        <th class="right">Monto Unit.</th>
-                        <th class="right">Tipo</th>
-                        <th>Acción</th>
+                        <th>Description</th>
+                        <th class="right">Quantity</th>
+                        <th class="right">Unit Amount</th>
+                        <th class="right">Type</th>
+                        <th>Action</th>
                     </tr>
                     </thead>
                     <tbody id="additional-items-tbody"></tbody>
                 </table>
-                <div style="margin-top:10px"><button id="add-item-btn" class="btn-secondary">+ Añadir Ítem</button></div>
+                <div style="margin-top:10px"><button id="add-item-btn" class="btn-secondary">+ Add Item</button></div>
 
                 <div class="totals">
-                    <div class="row"><div>Subtotal Productos:</div><div id="summary-subtotal-productos">0.00</div></div>
-                    <div class="row"><div>Total Adicionales/Deducciones:</div><div id="summary-total-adicionales">0.00</div></div>
+                    <div class="row"><div>Products Subtotal:</div><div id="summary-subtotal-productos">0.00</div></div>
+                    <div class="row"><div>Additional Total:</div><div id="summary-total-adicionales">0.00</div></div>
 
                     <div style="width:100%; display:flex; gap:12px; justify-content:flex-end; align-items:center">
-                        <label for="descuento-global" style="margin:0; font-weight:600;">Descuento Global (Bs.)</label>
+                        <label for="descuento-global" style="margin:0; font-weight:600;">Global Discount (Bs.)</label>
                         <input id="descuento-global" type="number" value="0.00" step="0.01" style="width:140px; text-align:right">
-                        <label for="tasa-impuesto" style="margin:0; font-weight:600;">Tasa de Impuesto (%)</label>
+                        <label for="tasa-impuesto" style="margin:0; font-weight:600;">Tax Rate (%)</label>
                         <input id="tasa-impuesto" type="number" value="13.00" step="0.01" style="width:140px; text-align:right">
                     </div>
 
-                    <div class="row"><div>Monto Impuestos:</div><div id="summary-impuestos">0.00</div></div>
-                    <div class="row grand"><div>TOTAL A PAGAR (Bs.)</div><div id="summary-total-final">0.00</div></div>
+                    <div class="row"><div>Taxes:</div><div id="summary-impuestos">0.00</div></div>
+                    <div class="row grand"><div>TOTAL TO PAY (Bs.)</div><div id="summary-total-final">0.00</div></div>
                 </div>
 
                 <div class="actions">
-                    <button id="generate-invoice-btn" class="btn-primary">Guardar Factura</button>
-                    <button id="print-conformity-btn" class="btn-secondary">Imprimir Hoja de Conformidad</button>
-                    <button id="print-invoice-btn" class="btn-secondary">Imprimir Factura</button>
+                    <button id="generate-invoice-btn" class="btn-primary">Save Invoice</button>
+                    <button id="print-conformity-btn" class="btn-secondary">Print Conformity</button>
+                    <button id="print-invoice-btn" class="btn-secondary">Print Invoice</button>
                 </div>
 
                 <div id="final-status" class="status" aria-live="polite"></div>
@@ -244,12 +244,12 @@
             e.preventDefault();
             const codigoVenta = document.getElementById('codigo-venta-search').value.trim();
             if(!codigoVenta){
-                searchStatus.className='status error'; searchStatus.textContent='Ingrese un código de venta'; return;
+                searchStatus.className='status error'; searchStatus.textContent='Enter a sale code'; return;
             }
 
             fetch(`../facturacion?codigoVenta=${encodeURIComponent(codigoVenta)}`)
                 .then(response => {
-                    if(!response.ok) return response.json().then(err=>{throw new Error(err.message||'Error en servidor')});
+                    if(!response.ok) return response.json().then(err=>{throw new Error(err.message||'Server error')});
                     return response.json();
                 })
                 .then(data=>{
@@ -260,7 +260,7 @@
                     window.scrollTo({top:0, behavior:'smooth'});
                 })
                 .catch(err=>{
-                    searchStatus.className='status error'; searchStatus.style.display='block'; searchStatus.textContent=err.message || 'Venta no encontrada';
+                    searchStatus.className='status error'; searchStatus.style.display='block'; searchStatus.textContent=err.message || 'Sale not found';
                     invoiceSection.style.display='none';
                 });
         });
@@ -288,7 +288,7 @@
 
         addItemBtn.addEventListener('click', ()=>{
             const row=document.createElement('tr');
-            row.innerHTML=`<td><input class="item-descripcion" type="text" placeholder="Ej: Costo de envío"></td><td class="right"><input class="item-cantidad" type="number" value="1" min="1"></td><td class="right"><input class="item-monto" type="number" value="0.00" step="0.01"></td><td class="right"><select class="item-tipo"><option value="ADICION">Suma (+)</option><option value="DEDUCCION">Resta (-)</option></select></td><td><button class="remove-item btn-danger">X</button></td>`;
+            row.innerHTML=`<td><input class="item-descripcion" type="text" placeholder="e.g.: Shipping cost"></td><td class="right"><input class="item-cantidad" type="number" value="1" min="1"></td><td class="right"><input class="item-monto" type="number" value="0.00" step="0.01"></td><td class="right"><select class="item-tipo"><option value="ADICION">Add (+)</option><option value="DEDUCCION">Subtract (-)</option></select></td><td><button class="remove-item btn-danger">X</button></td>`;
             additionalItemsTbody.appendChild(row);
         });
 
@@ -323,7 +323,7 @@
         }
 
         generateInvoiceBtn.addEventListener('click', ()=>{
-            if(!ventaInfo) return alert('Primero carga una venta');
+            if(!ventaInfo) return alert('Load a sale first');
             const items=[];
             document.querySelectorAll('#additional-items-tbody tr').forEach(row=>{
                 items.push({ descripcion: row.querySelector('.item-descripcion').value, cantidad: parseInt(row.querySelector('.item-cantidad').value)||0, montoUnitario: parseFloat(row.querySelector('.item-monto').value)||0, tipo: row.querySelector('.item-tipo').value });
@@ -332,8 +332,8 @@
             fetch('../facturacion',{ method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(factura) })
                 .then(res=>res.json().then(b=>({status:res.status, body:b})))
                 .then(({status, body})=>{
-                    const fs=document.getElementById('final-status'); fs.className='status '+(status===200? 'success':'error'); fs.textContent=body.message|| (status===200? 'Factura guardada.':'Error al guardar'); if(status===200){ generateInvoiceBtn.disabled=true; document.getElementById('search-form').reset(); }
-                }).catch(err=>{ const fs=document.getElementById('final-status'); fs.className='status error'; fs.textContent=err.message||'Error de conexión'; });
+                    const fs=document.getElementById('final-status'); fs.className='status '+(status===200? 'success':'error'); fs.textContent=body.message|| (status===200? 'Invoice saved.':'Error saving'); if(status===200){ generateInvoiceBtn.disabled=true; document.getElementById('search-form').reset(); }
+                }).catch(err=>{ const fs=document.getElementById('final-status'); fs.className='status error'; fs.textContent=err.message||'Connection error'; });
         });
 
         // Hoja de conformidad (simplificada) — ahora incluye ubicacion en la tabla si existe
@@ -349,7 +349,7 @@
                 </tr>`;
             });
             const w=window.open('','_blank');
-            w.document.write(`<html><head><title>Hoja de Conformidad</title><style>body{font-family:Arial;margin:30px}table{width:100%;border-collapse:collapse}th,td{border:1px solid #ccc;padding:8px}</style></head><body><h1>Hoja de Conformidad</h1><p><strong>Cliente:</strong> ${ventaInfo.clienteNombre||''}</p><p><strong>Referencia:</strong> ${ventaInfo.codigoVenta||''}</p><table><thead><tr><th>Cantidad</th><th>Producto</th><th>Ubicación</th><th>Revisado (OK)</th></tr></thead><tbody>${productosHtml}</tbody></table><div style="margin-top:40px">Firma: ____________________</div></body></html>`);
+            w.document.write(`<html><head><title>Conformity</title><style>body{font-family:Arial;margin:30px}table{width:100%;border-collapse:collapse}th,td{border:1px solid #ccc;padding:8px}</style></head><body><h1>Conformity Sheet</h1><p><strong>Customer:</strong> ${ventaInfo.clienteNombre||''}</p><p><strong>Reference:</strong> ${ventaInfo.codigoVenta||''}</p><table><thead><tr><th>Quantity</th><th>Product</th><th>Location</th><th>Checked (OK)</th></tr></thead><tbody>${productosHtml}</tbody></table><div style="margin-top:40px">Signature: ____________________</div></body></html>`);
             w.document.close(); w.print();
         });
 
@@ -374,7 +374,7 @@
             const totalFinal = document.getElementById('summary-total-final').textContent || '0.00';
 
             const w=window.open('','_blank');
-            w.document.write(`<html><head><title>Factura ${ventaInfo.codigoVenta||''}</title><style>
+            w.document.write(`<html><head><title>Invoice ${ventaInfo.codigoVenta||''}</title><style>
                 body{font-family:Arial;margin:20px;color:#222}
                 .header{display:flex;justify-content:space-between;align-items:center}
                 h1{margin:0}
@@ -385,22 +385,22 @@
                 .totals{margin-top:12px;width:50%;float:right}
                 .totals .row{display:flex;justify-content:space-between;padding:6px 0}
             </style></head><body>
-                <div class="header"><div><h1>FACTURA</h1><p><strong>Cliente:</strong> ${ventaInfo.clienteNombre||''}</p><p><strong>Venta:</strong> ${ventaInfo.codigoVenta||''}</p><p><strong>Fecha:</strong> ${ventaInfo.fechaVenta ? new Date(ventaInfo.fechaVenta).toLocaleString() : ''}</p></div><div><img src="https://i.ibb.co/L5MvV2M/logo.png" style="height:70px"></div></div>
+                <div class="header"><div><h1>INVOICE</h1><p><strong>Customer:</strong> ${ventaInfo.clienteNombre||''}</p><p><strong>Sale:</strong> ${ventaInfo.codigoVenta||''}</p><p><strong>Date:</strong> ${ventaInfo.fechaVenta ? new Date(ventaInfo.fechaVenta).toLocaleString() : ''}</p></div><div><img src="https://i.ibb.co/L5MvV2M/logo.png" style="height:70px"></div></div>
 
-                <h3>Productos</h3>
+                <h3>Products</h3>
                 <table>
-                    <thead><tr><th>Producto</th><th>Ubicación</th><th style="text-align:center">Cant.</th><th style="text-align:right">Precio U.</th><th style="text-align:right">Subtotal</th></tr></thead>
+                    <thead><tr><th>Product</th><th>Location</th><th style="text-align:center">Qty.</th><th style="text-align:right">Unit Price</th><th style="text-align:right">Subtotal</th></tr></thead>
                     <tbody>${productosHtml}</tbody>
                 </table>
 
                 <div class="totals">
-                    <div class="row"><div>Subtotal Productos:</div><div>${parseFloat(subtotal).toFixed(2)}</div></div>
-                    <div class="row"><div>Adicionales/Deducciones:</div><div>${parseFloat(adicionales).toFixed(2)}</div></div>
-                    <div class="row"><div>Impuestos:</div><div>${parseFloat(impuestos).toFixed(2)}</div></div>
+                    <div class="row"><div>Products Subtotal:</div><div>${parseFloat(subtotal).toFixed(2)}</div></div>
+                    <div class="row"><div>Additional:</div><div>${parseFloat(adicionales).toFixed(2)}</div></div>
+                    <div class="row"><div>Taxes:</div><div>${parseFloat(impuestos).toFixed(2)}</div></div>
                     <div class="row" style="font-weight:700"><div>TOTAL:</div><div>${parseFloat(totalFinal).toFixed(2)}</div></div>
                 </div>
 
-                <div style="clear:both; margin-top:60px"><strong>Observaciones:</strong> __________________________</div>
+                <div style="clear:both; margin-top:60px"><strong>Notes:</strong> __________________________</div>
 
             </body></html>`);
             w.document.close();

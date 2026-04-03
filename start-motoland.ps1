@@ -29,6 +29,19 @@ Write-Host "Deploying to Tomcat..." -ForegroundColor Yellow
 $warFile = Join-Path $workspaceFolder "target\motoland.war"
 $tomcatWebapps = Join-Path $env:TOMCAT_HOME "webapps"
 
+# Remove old legacy deployment to avoid opening the wrong (Spanish) app context.
+$legacyName = "miloginwebcontodo-1.0-SNAPSHOT"
+$legacyDir = Join-Path $tomcatWebapps $legacyName
+$legacyWar = Join-Path $tomcatWebapps ($legacyName + ".war")
+if (Test-Path $legacyDir) {
+    Remove-Item $legacyDir -Recurse -Force -ErrorAction SilentlyContinue
+    Write-Host "Removed legacy app folder: $legacyName" -ForegroundColor DarkGray
+}
+if (Test-Path $legacyWar) {
+    Remove-Item $legacyWar -Force -ErrorAction SilentlyContinue
+    Write-Host "Removed legacy app WAR: $legacyName.war" -ForegroundColor DarkGray
+}
+
 if (!(Test-Path $warFile)) {
     Write-Host "WAR file not found: $warFile" -ForegroundColor Red
     exit 1

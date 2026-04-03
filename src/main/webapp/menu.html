@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MOTOLAND S.A. — Sistema de Gestión</title>
+    <title>MOTOLAND S.A. — Management System</title>
     <link rel="stylesheet" href="spa.css">
 </head>
 <body>
@@ -18,58 +18,58 @@
         <div class="sidebar-brand">
             <div class="brand-logo">M</div>
             <h2>MOTOLAND</h2>
-            <div class="brand-sub">Sistema de Gestión</div>
+            <div class="brand-sub">Management System</div>
         </div>
 
         <nav class="sidebar-nav">
-            <div class="nav-section-title">Principal</div>
+            <div class="nav-section-title">Main</div>
             <div class="nav-item active" data-view="dashboard">
                 <span class="nav-icon"><i data-lucide="home"></i></span>
-                <span class="nav-label">Panel Principal</span>
+                <span class="nav-label">Dashboard</span>
             </div>
 
-            <div class="nav-section-title">Inventario</div>
+            <div class="nav-section-title">Inventory</div>
             <div class="nav-item" data-view="productos">
                 <span class="nav-icon"><i data-lucide="package"></i></span>
-                <span class="nav-label">Productos</span>
+                <span class="nav-label">Products</span>
             </div>
             <div class="nav-item" data-view="proveedores">
                 <span class="nav-icon"><i data-lucide="truck"></i></span>
-                <span class="nav-label">Proveedores</span>
+                <span class="nav-label">Suppliers</span>
             </div>
 
-            <div class="nav-section-title">Operaciones</div>
+            <div class="nav-section-title">Operations</div>
             <div class="nav-item" data-view="clientes">
                 <span class="nav-icon"><i data-lucide="users"></i></span>
-                <span class="nav-label">Clientes</span>
+                <span class="nav-label">Customers</span>
             </div>
             <div class="nav-item" data-view="ventas">
                 <span class="nav-icon"><i data-lucide="tag"></i></span>
-                <span class="nav-label">Ventas</span>
+                <span class="nav-label">Sales</span>
             </div>
             <div class="nav-item" data-view="compras">
                 <span class="nav-icon"><i data-lucide="shopping-cart"></i></span>
-                <span class="nav-label">Compras</span>
+                <span class="nav-label">Purchases</span>
             </div>
             <div class="nav-item" data-view="devoluciones">
                 <span class="nav-icon"><i data-lucide="undo-2"></i></span>
-                <span class="nav-label">Devoluciones</span>
+                <span class="nav-label">Returns</span>
             </div>
 
-            <div class="nav-section-title">Reportes</div>
+            <div class="nav-section-title">Reports</div>
             <div class="nav-item" data-view="historial">
                 <span class="nav-icon"><i data-lucide="bar-chart-2"></i></span>
-                <span class="nav-label">Historial</span>
+                <span class="nav-label">History</span>
             </div>
             <div class="nav-item" data-view="facturacion">
                 <span class="nav-icon"><i data-lucide="receipt"></i></span>
-                <span class="nav-label">Facturación</span>
+                <span class="nav-label">Billing</span>
             </div>
         </nav>
 
         <div class="sidebar-footer">
             <button id="btn-logout" class="btn-logout">
-                <i data-lucide="log-out"></i> Cerrar Sesión
+                <i data-lucide="log-out"></i> Sign Out
             </button>
         </div>
     </aside>
@@ -78,19 +78,19 @@
     <div class="main-content">
         <header class="topbar">
             <div class="topbar-left">
-                <button id="btn-menu-toggle" class="btn-menu-toggle" aria-label="Menú"><i data-lucide="menu"></i></button>
-                <span id="topbar-title" class="topbar-title">Panel Principal</span>
+                <button id="btn-menu-toggle" class="btn-menu-toggle" aria-label="Menu"><i data-lucide="menu"></i></button>
+                <span id="topbar-title" class="topbar-title">Dashboard</span>
             </div>
             <div class="topbar-right">
                 <div class="topbar-user">
                     <div class="user-avatar">U</div>
-                    <span>Usuario</span>
+                    <span>User</span>
                 </div>
             </div>
         </header>
 
         <main id="content-area" class="content-area">
-            <!-- aca se inyecta cada modulo -->
+            <!-- module content injected here -->
             <div class="spinner-container"><div class="spinner"></div></div>
         </main>
     </div>
