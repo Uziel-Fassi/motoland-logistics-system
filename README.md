@@ -21,6 +21,12 @@ This solution was designed with **scalability** and **data consistency** as prim
 
 ---
 
+### 📸 Visual Showcase
+
+<div align="center">
+  <img src="./docs/general-motoland.gif" alt="Page Showcase" width="100%">
+</div>
+
 ## 🛠️ Tech Stack
 
 | Component | Technology | Rationale |
