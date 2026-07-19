@@ -109,7 +109,9 @@ src/main/
 ### 👨‍💻 Author
 **Uziel Fassi**
 *Computer Science Undergraduate & Full-Stack / AI Engineer*
+
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/uziel-fassi-08840a287/)
+
 [![Portfolio](https://img.shields.io/badge/Portfolio-Visit%20Site-black?style=for-the-badge&logo=framer&logoColor=white)](https://myportfoliouzielf.framer.website)
 
 ### QA Testing
